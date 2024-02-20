@@ -1,0 +1,21 @@
+HTTrack3.49-2+htsswf+htsjava launched on Tue, 20 Feb 2024 14:37:50 at https://bepatrickdavid.com +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "fr, en, *" https://bepatrickdavid.com -O1 "C:\Mes Sites Web\portfolio" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+14:37:54	Warning: 	Moved Permanently for bepatrickdavid.com/robots.txt
+14:37:54	Warning: 	Redirected link is identical because of 'URL Hack' option: bepatrickdavid.com/robots.txt and https://bepatrickdavid.com/robots.txt
+14:37:54	Warning: 	Warning moved treated for bepatrickdavid.com/robots.txt (real one is https://bepatrickdavid.com/robots.txt)
+14:37:54	Warning: 	Moved Permanently for bepatrickdavid.com/analytics/
+14:37:54	Warning: 	Redirected link is identical because of 'URL Hack' option: bepatrickdavid.com/analytics/ and https://bepatrickdavid.com/analytics/
+14:37:54	Warning: 	File has moved from bepatrickdavid.com/analytics/ to https://bepatrickdavid.com/analytics/
+14:37:59	Warning: 	Warning: store application/octet-stream without scan: C:/Mes Sites Web/portfolio/bepatrickdavid.com/28c8b6d841bf8ef6a4f1302e7cb6d615.svg
+14:37:59	Warning: 	Warning: store application/octet-stream without scan: C:/Mes Sites Web/portfolio/bepatrickdavid.com/e875b74c93b2774ca7153989a8e7c161.svg
+14:37:59	Warning: 	Warning: store application/octet-stream without scan: C:/Mes Sites Web/portfolio/bepatrickdavid.com/c562a1ecee182460a3b5fcfd212af76c.svg
+14:37:59	Warning: 	Warning: store application/octet-stream without scan: C:/Mes Sites Web/portfolio/bepatrickdavid.com/666f32e227f670c49653acf800cfaa4b.svg
+
+HTTrack Website Copier/3.49-2 mirror complete in 9 seconds : 35 links scanned, 32 files written (2039950 bytes overall) [1341544 bytes received at 149060 bytes/sec], 1008064 bytes transferred using HTTP compression in 10 files, ratio 29%, 11.6 requests per connection
+(No errors, 10 warnings, 0 messages)
