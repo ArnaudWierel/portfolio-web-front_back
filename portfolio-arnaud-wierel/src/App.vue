@@ -38,6 +38,18 @@
   text-align: center;
 }
 
+html, body {
+  overflow: hidden; /* Cela supprimera la barre de défilement pour toute l'application */
+  margin: 0;
+}
+
+html{
+  background-image: url("./assets/images/maintenance-background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 h1{
   font-family: Tusker Grotesk, sans-serif;
   font-weight: 900;
@@ -58,4 +70,5 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983;
 }
+
 </style>

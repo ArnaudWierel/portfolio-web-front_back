@@ -25,13 +25,10 @@ img {
 }
 
 .home {
-  background-image: url("../assets/images/maintenance-background.jpg");
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
+  height: 101vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
-
 </style>
