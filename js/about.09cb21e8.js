@@ -1,2 +1,2 @@
 "use strict";(self["webpackChunkportfolio_arnaud_wierel"]=self["webpackChunkportfolio_arnaud_wierel"]||[]).push([[594],{603:function(n,r,u){u.r(r),u.d(r,{default:function(){return f}});var a=u(6768);const e={class:"about"},t=(0,a.Lk)("h1",null,"This is an about page",-1),o=[t];function i(n,r){return(0,a.uX)(),(0,a.CE)("div",e,o)}var s=u(1241);const l={},c=(0,s.A)(l,[["render",i]]);var f=c}}]);
-//# sourceMappingURL=about.35e138e8.js.map
+//# sourceMappingURL=about.09cb21e8.js.map
