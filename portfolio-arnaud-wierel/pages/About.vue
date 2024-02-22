@@ -5,3 +5,12 @@
         <p>My name is Arnaud Wierel and .</p>
     </div>
 </template>
+
+<style scoped>
+    h1 {
+        color: red;
+    }
+    p {
+        font-size: 20px;
+    }
+</style>
