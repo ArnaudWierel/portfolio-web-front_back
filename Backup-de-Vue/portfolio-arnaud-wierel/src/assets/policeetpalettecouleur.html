@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <style>
+        @font-face {
+            font-family: 'Tusker Grotesk';
+            src: url('./font/TuskerGroteskFont/TuskerGrotesk-3500Medium.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Neue Montreal';
+            src: url('./font/NeueMontreal/NeueMontreal-Regular.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Migra';
+            src: url('./font/Migra/Migra-Extralight.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Maelstrom';
+            src: url('./font/Maelstrom/MaelstromBold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #c5ddf6;
+            font-family: 'Neue Montreal', sans-serif;
+        }
+
+        .container {
+            padding: 40px;
+        }
+
+        h1 {
+            font-family: 'Tusker Grotesk', sans-serif;
+            color: #011126;
+            font-size: 75px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #033369;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            font-family: 'Migra', sans-serif;
+            color: #0367fc;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .cta {
+            display: inline-block;
+            font-family: 'Maelstrom', sans-serif;
+            color: #fff;
+            background-color: #7AB0EE;
+            font-size: 30px;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta:hover {
+            background-color: #0367fc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Titre Exemple avec Tusker Grotesk</h1>
+        <p>Ceci est un exemple de texte utilisant la police Neue Montreal. Adaptée pour le contenu principal du corps.
+        </p>
+        <p class="highlight">Ceci est un texte en Migra, parfait pour mettre en évidence des informations clés ou des
+            citations.</p>
+        <a href="#" class="cta">Appel à l'action</a>
+
+        <!-- Coolors Palette Widget -->
+        <script src="https://coolors.co/palette-widget/widget.js"></script>
+        <script data-id="013547893831871516">new CoolorsPaletteWidget("013547893831871516", ["c5ddf6", "7ab0ee", "0367fc", "033369", "011126"]); 
+        </script>
+    </div>
+
+</body>
+
+</html>
