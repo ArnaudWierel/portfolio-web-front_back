@@ -4,5 +4,11 @@ export default defineNuxtConfig({
   typescript: {
     shim: false
   },
-  css: ['~/assets/css/main.scss']
+  css: ['~/assets/css/main.scss'],
+  modules: [
+    '@nuxt/image',
+  ],
+  image: {
+    dir: '~/assets/images'
+  }
 })
