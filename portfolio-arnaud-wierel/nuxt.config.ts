@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.scss'],
   modules: [
     '@nuxt/image',
+    'nuxt-icon'
   ],
   image: {
     dir: '~/assets/images'

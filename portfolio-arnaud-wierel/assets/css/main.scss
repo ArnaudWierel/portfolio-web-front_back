@@ -26,15 +26,6 @@
     font-style: normal;
 }
 
-html,
-body {
-    overflow: hidden;
-    margin: 0;
-}
-
-html {
-    background-image: url("~/assets/images/maintenance-background.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+html{
+    background-color: #7ab0ee;
 }
