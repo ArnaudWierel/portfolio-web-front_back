@@ -1,7 +1,9 @@
 <template>
-<div class="menu">
-    <Icon name="line-md:menu-to-close-alt-transition" size="50" @click="toggleMenu"/>
-    <div class="message">
+<div class="Menu-Links">
+    <div class="burger-menu">
+        <Icon name="line-md:menu-to-close-alt-transition" size="50" @click="toggleMenu"/>
+    </div>
+    <div class="page">
         <h1>Menu</h1>
         <p>Click on the links to navigate</p>
     </div>
@@ -17,3 +19,9 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.page {
+    align-items: center;
+}
+</style>
