@@ -7,10 +7,13 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.scss'],
   modules: [
     '@nuxt/image',
-    'nuxt-icon'
+    'nuxt-icon',
+    '@hypernym/nuxt-anime'
   ],
   image: {
     dir: '~/assets/images'
   },
-  
+  anime: {
+    composables: true
+  }
 })
