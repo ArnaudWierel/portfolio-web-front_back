@@ -1,40 +1,10 @@
-<template>
-  <div class="home">
-    <div class="menu">
-      <div class="burger-menu">
-          <Icon id="menu-burger-icon" name="line-md:menu" size="50" @click="toggleMenu" />
-      </div>
-    </div>
-
-    <div class="page">
-        <div class="landing-text">
-          <h1 id="first-name-last-name"
-            @mouseenter="animateNameEnter"
-            @mouseleave="animateNameLeave">
-            Arnaud Wierel
-          </h1>
-
-          <h1 id="job-name">Developer Web Front and Back</h1>
-      </div>
-
-      <div class="projects">
-        <h2>Projects</h2>
-        <div class="project" v-for="project in projects" :key="project.id">
-          <h3>{{ project.title }}</h3>
-          <p>{{ project.description }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
-import { onMounted, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import anime from 'animejs';
+import { useNuxtApp } from '#app';
 
 const router = useRouter();
 
-// Your data and methods can be defined here
 const isMenuVisible = ref(false);
 const projects = ref([
   { id: 1, title: 'Project 1', description: 'Project 1 description' },
@@ -42,16 +12,12 @@ const projects = ref([
   { id: 3, title: 'Project 3', description: 'Project 3 description' },
 ]);
 
-// Example of a method
 const toggleMenu = () => {
-  // Navigate using Nuxt 3's useRouter
   router.push('/menu');
 };
 
-// Function to initialize or re-initialize animations on the page
 function initPageAnimations() {
   document.getElementById('first-name-last-name').style.color = '#033369';
-
   anime.timeline({ easing: 'easeOutExpo' })
     .add({
       targets: '#first-name-last-name',
@@ -64,60 +30,77 @@ function initPageAnimations() {
 
 onMounted(() => {
   initPageAnimations();
+  initGSAPAnimations();
 });
 
-// Example of using a watcher to react to route changes
-// This could be adjusted based on how your routing is set up and when you want animations to re-trigger
-  // Check if the newPath is the home page and re-initialize animations
-// Adjust the condition based on your app's routing structure
+const initGSAPAnimations = () => {
+  const { $gsap: gsap, $ScrollTrigger: ScrollTrigger } = useNuxtApp();
 
-watch(() => router.path, (newPath) => {
-  if (newPath === '/') {
-    initPageAnimations();
-  }
-});
+  gsap.registerPlugin(ScrollTrigger);
 
-const animateNameEnter = () => {
-  anime({
-    targets: '#first-name-last-name',
-    scale: [1, 1.05], // Subtle growth in size
-    color: '#0367fc', // Change color to blue
-    duration: 800,
-    easing: 'easeInOutSine',
-    begin: function (anim) {
-      const element = document.getElementById('first-name-last-name');
-      // Réduire la valeur du textShadow pour un effet moins prononcé
-      element.style.textShadow = '0 0 5px #0367fc, 0 0 10px #0367fc';
-    },
-  });
-};
-
-const animateNameLeave = () => {
-  anime({
-    targets: '#first-name-last-name',
-    scale: [1.05, 1], // Shrink back to original size
-    color: '#033369', // Change color back to original
-    duration: 800,
-    easing: 'easeInOutSine',
-    complete: function (anim) {
-      const element = document.getElementById('first-name-last-name');
-      element.style.textShadow = 'none';
-    },
+  projects.value.forEach((project, index) => {
+    gsap.fromTo(`#project-${project.id}`,
+      { y: 30, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: `#project-${project.id}`,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          toggleActions: 'play none none reverse', // Ajoutez cette ligne
+          markers: true,
+        }
+      });
   });
 };
 </script>
 
+<template>
+  <div class="home">
+    <div class="menu">
+      <div class="burger-menu">
+        <Icon id="menu-burger-icon" name="line-md:menu" size="50" @click="toggleMenu" />
+      </div>
+    </div>
 
+    <div class="page">
+      <div class="landing-text">
+        <h1 id="first-name-last-name"
+          @mouseenter="animateNameEnter"
+          @mouseleave="animateNameLeave">
+          Arnaud Wierel
+        </h1>
 
+        <h1 id="job-name">Developer Web Front and Back</h1>
+      </div>
+
+      <div class="projects">
+        <h2>Projects</h2>
+        <div class="project" v-for="project in projects" :key="project.id" :id="`project-${project.id}`">
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style>
+
+.projects {
+  min-height: 100vh; /* Assurez-vous que chaque projet est assez haut pour le défilement */
+}
 
 img {
   width: 200px;
   height: 200px;
   margin-bottom: 50px;
 }
-h1{
+
+h1 {
   font-family: Tusker Grotesk, sans-serif;
   font-weight: 900;
   color: #2c3e50;
@@ -133,17 +116,18 @@ h1{
   z-index: 100;
   position: relative;
 }
+
 .icon {
   cursor: pointer;
 }
 
-.page{
+.page {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.landing-text{
+.landing-text {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -158,11 +142,16 @@ h1{
   align-items: flex-start;
   flex-wrap: wrap;
   margin-bottom: clamp(10vh, 10vw, 20vh);
-  color: rgba(0, 0, 0, 0); /* Initial state is transparent, animation will fade in */
-  transition: text-shadow 0.3s ease-in-out; /* Smooth transition for text-shadow */
-  padding: 0 1vw; /* Ajoutez un padding pour réduire la hitbox */
-  inline-size: fit-content; /* Limite la largeur à celle du contenu */
-  box-sizing: border-box; /* Assurez-vous que le padding est inclus dans la largeur */
+  color: rgba(0, 0, 0, 0);
+  /* Initial state is transparent, animation will fade in */
+  transition: text-shadow 0.3s ease-in-out;
+  /* Smooth transition for text-shadow */
+  padding: 0 1vw;
+  /* Ajoutez un padding pour réduire la hitbox */
+  inline-size: fit-content;
+  /* Limite la largeur à celle du contenu */
+  box-sizing: border-box;
+  /* Assurez-vous que le padding est inclus dans la largeur */
 }
 
 #job-name {
@@ -173,5 +162,4 @@ h1{
   justify-content: flex-end;
   margin-right: 5vw;
   text-align: right;
-}
-</style>
+}</style>
