@@ -8,12 +8,16 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/image',
     'nuxt-icon',
-    '@hypernym/nuxt-anime'
+    '@hypernym/nuxt-anime',
+    '@hypernym/nuxt-gsap'
   ],
   image: {
     dir: '~/assets/images'
   },
   anime: {
     composables: true
+  },
+  gsap: {
+    provide: false
   }
 })
