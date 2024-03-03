@@ -17,7 +17,7 @@ const toggleMenu = () => {
 };
 
 function initPageAnimations() {
-  document.getElementById('first-name-last-name').style.color = '#033369';
+  document.getElementById('first-name-last-name').style.color = '#7ab0ee';
   anime.timeline({ easing: 'easeOutExpo' })
     .add({
       targets: '#first-name-last-name',
@@ -55,11 +55,62 @@ const initGSAPAnimations = () => {
         }
       });
   });
+
+  // quand le #first-name-last-name disparait de on fait une animation et quand il revient on fait une autre animation
+  ScrollTrigger.create({
+    trigger: '#first-name-last-name',
+    start: 'top 80%',
+    end: 'bottom 20%',
+    onLeave: () => {
+      anime({
+        targets: '#first-name-last-name',
+        scale: 0.75,
+        opacity: 0,
+        translateX: -250,
+        duration: 2000,
+      });
+    },
+    onEnterBack: () => {
+      anime({
+        targets: '#first-name-last-name',
+        scale: 1,
+        opacity: 1,
+        translateX: 0,
+        duration: 2000,
+      });
+    },
+  });
+
+  // quand le #job-name disparait de on fait une animation et quand il revient on fait une autre animation
+  ScrollTrigger.create({
+    trigger: '#job-name',
+    start: 'top 80%',
+    end: 'bottom 20%',
+    onLeave: () => {
+      anime({
+        targets: '#job-name',
+        scale: 0.75,
+        opacity: 0,
+        translateX: 250,
+        duration: 2000,
+      });
+    },
+    onEnterBack: () => {
+      anime({
+        targets: '#job-name',
+        scale: 1,
+        opacity: 1,
+        translateX: 0,
+        duration: 2000,
+      });
+    },
+  });
 };
 </script>
 
 <template>
   <div class="home">
+    <VideoBackground />
     <div class="menu">
       <div class="burger-menu">
         <Icon id="menu-burger-icon" name="line-md:menu" size="50" @click="toggleMenu" />
@@ -68,9 +119,7 @@ const initGSAPAnimations = () => {
 
     <div class="page">
       <div class="landing-text">
-        <h1 id="first-name-last-name"
-          @mouseenter="animateNameEnter"
-          @mouseleave="animateNameLeave">
+        <h1 id="first-name-last-name" @mouseenter="animateNameEnter" @mouseleave="animateNameLeave">
           Arnaud Wierel
         </h1>
 
@@ -103,7 +152,7 @@ img {
 h1 {
   font-family: Tusker Grotesk, sans-serif;
   font-weight: 900;
-  color: #2c3e50;
+  color: #93c7ff;
 }
 
 .burger-menu {
@@ -141,7 +190,7 @@ h1 {
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
-  margin-bottom: clamp(10vh, 10vw, 20vh);
+  margin-bottom: clamp(40vh, 10vw, 20vh);
   color: rgba(0, 0, 0, 0);
   /* Initial state is transparent, animation will fade in */
   transition: text-shadow 0.3s ease-in-out;
@@ -162,4 +211,5 @@ h1 {
   justify-content: flex-end;
   margin-right: 5vw;
   text-align: right;
-}</style>
+}
+</style>
