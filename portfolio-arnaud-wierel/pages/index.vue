@@ -190,7 +190,7 @@ h1 {
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
-  margin-bottom: clamp(40vh, 10vw, 20vh);
+  margin-bottom: clamp(30vh, 10vw, 20vh);
   color: rgba(0, 0, 0, 0);
   /* Initial state is transparent, animation will fade in */
   transition: text-shadow 0.3s ease-in-out;
