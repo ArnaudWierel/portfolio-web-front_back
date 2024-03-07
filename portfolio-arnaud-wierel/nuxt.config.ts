@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     composables: true
   },
   gsap: {
+    composables: true,
     provide: false
   }
 })
