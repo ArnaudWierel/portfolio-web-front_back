@@ -49,7 +49,7 @@
       <path id="smallCirclePath" d="M50,50 m-10,0 a10,10 0 1,1 20,0 a10,10 0 1,1 -20,0" fill="none" />
       </g>
     </svg>
-     <router-link to="/home" class="center-button">Home</router-link>
+      <button @click="goToHome" class="center-button">Home</button>
   </div>
 </template>
 
@@ -61,6 +61,8 @@ import { useNuxtApp } from '#app';
 // Références pour contrôler l'état de survol
 const isHovering = ref(false);
 
+
+
 const InitHoverAnimation = () => {
   const { $gsap: gsap, $MotionPathPlugin: MotionPathPlugin } = useNuxtApp();
 
@@ -69,14 +71,49 @@ const InitHoverAnimation = () => {
 
   const button = document.querySelector('.center-button');
 
+  // Initialisation des états d'animation avec l'opacité et l'échelle à 0 pour le SVG et le bouton
+  gsap.set(['.circular-text-container svg', '.center-button'], { scale: 0, opacity: 0 });
+
+  // Animation d'entrée pour le SVG
+  gsap.to('.circular-text-container svg', {
+    opacity: 1,
+    scale: 1,
+    duration: 0.5,
+    ease: 'power1.out',
+    delay: 0.3
+  });
+
+  // Animation d'entrée pour le bouton, potentiellement avec un délai différent pour créer un effet coordonné
+  gsap.to('.center-button', {
+    opacity: 1,
+    scale: 1,
+    duration: 0.5,
+    ease: 'power1.out',
+    delay: 0.5 // Ajustez ce délai au besoin
+  });
+
+
+  // Initialisation des états d'animation
+  gsap.set('.circular-text-container svg', { scale: 0 });
+  gsap.set([".rotateLargeCircle", ".rotateMediumCircle", ".rotateSmallCircle"], { rotation: 0, transformOrigin: "50% 50%" });
+  gsap.set('.center-button', { scale: 1, backgroundColor: '#033369', color: '#59a6fe' });
+
+  // Animation d'entrée
+  gsap.to('.circular-text-container svg', { scale: 1, duration: 0.5, ease: 'power1.out', delay: 0.3 });
+
+
   button.addEventListener('mouseenter', () => {
     isHovering.value = true;
+
+    // animation du bouton lors du survol (zoom et changement de couleur)
+    gsap.to('.center-button', { scale: 1.1, duration: 0.5, ease: 'power1.out' });
+    gsap.to('.center-button', { backgroundColor: '#59a6fe', color: '#033369', duration: 0.25, ease: 'power1.out' });
 
     // Animation de zoom et de rotation lors du survol
     gsap.to('.circular-text-container svg', { scale: 1.1, duration: 0.5, ease: 'power1.out' });
     gsap.to(".rotateLargeCircle", { rotation: "+=45", duration: 2, ease: "power1.out", transformOrigin: "50% 50%" });
     gsap.to(".rotateMediumCircle", { rotation: "-=45", duration: 2, ease: "power1.out", transformOrigin: "50% 50%" });
-    gsap.to(".rotateSmallCircle", { rotation: "+=45", duration: 2, ease: "power1.out", transformOrigin: "50% 50%" });
+    gsap.to(".rotateSmallCircle", { rotation: "+=120", duration: 2, ease: "power1.out", transformOrigin: "50% 50%" });
   });
 
   button.addEventListener('mouseleave', () => {
@@ -85,7 +122,17 @@ const InitHoverAnimation = () => {
     // Réinitialisation des transformations
     gsap.to('.circular-text-container svg', { scale: 1, duration: 0.5, ease: 'power1.in' });
     gsap.to([".rotateLargeCircle", ".rotateMediumCircle", ".rotateSmallCircle"], { rotation: 0, duration: 0.5, ease: "power1.in", transformOrigin: "50% 50%" });
+    gsap.to('.center-button', { scale: 1, duration: 0.5, ease: 'power1.in' });
+    gsap.to('.center-button', { backgroundColor: '#033369', color: '#59a6fe', duration: 0.25, ease: 'power1.in' });
   });
+};
+
+const goToHome = () => {
+  const { $router } = useNuxtApp();
+  const { $gsap: gsap } = useNuxtApp();
+
+  // transition entre les pages quand on clique sur le bouton
+  gsap.to('.circular-text-container svg', { scale: 0, duration: 0.5, ease: 'power1.in', onComplete: () => $router.push('/home') });
 };
 
 onMounted(() => {
@@ -96,6 +143,14 @@ onMounted(() => {
 
 
 <style scoped>
+.circular-text-container svg {
+  opacity: 0; /* ou `visibility: hidden;` */
+}
+
+.center-button {
+  opacity: 0; /* ou `visibility: hidden;` */
+}
+
 .circular-text-container {
   position: relative;
   display: flex;
@@ -129,5 +184,10 @@ onMounted(() => {
   align-items: center;
   text-align: center;
   cursor: pointer;
+}
+
+/* overflow: hidden pour eviter le scroll vertical */
+body {
+  overflow: hidden;
 }
 </style>

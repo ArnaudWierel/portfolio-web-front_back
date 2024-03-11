@@ -14,26 +14,33 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 const videoBg = ref(null);
 const video = ref(null);
-const bgColor = ref(null);
 
 onMounted(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.fromTo(videoBg.value, { opacity: 0 }, {
-        opacity: 1,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: videoBg.value,
-            start: 'top 80%',
-            end: 'bottom 20%',
-            toggleActions: 'play none none reverse',
+    // Animation d'entrée de la vidéo
+    gsap.fromTo(videoBg.value, 
+        { opacity: 0 }, 
+        {
+            opacity: 1,
+            duration: 1,
+            ease: 'power3.out',
+            onStart: () => {
+                videoBg.value.style.visibility = 'visible';
+            },
+            scrollTrigger: {
+                trigger: videoBg.value,
+                start: 'top 80%',
+                end: 'bottom 20%',
+                toggleActions: 'play none none reverse',
+            }
         }
-    });
+    );
 
-    // sur le scroll de la page on réduit l'opacité de la video
+    // Sur le scroll de la page, on réduit l'opacité de la vidéo
     window.addEventListener('scroll', () => {
-        video.value.style.opacity = 1 - window.scrollY / 800;
+        const newOpacity = 1 - window.scrollY / 800;
+        video.value.style.opacity = newOpacity > 0 ? newOpacity : 0; // S'assurer que l'opacité ne devient pas négative
     });
 });
 </script>
@@ -47,6 +54,7 @@ onMounted(() => {
     min-width: 100vw;
     min-height: 100vh;
     z-index: -1;
+    visibility: hidden;
 }
 
 video {

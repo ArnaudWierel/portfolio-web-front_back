@@ -18,6 +18,7 @@ const toggleMenu = () => {
 
 function initPageAnimations() {
   document.getElementById('first-name-last-name').style.color = '#7ab0ee';
+  document.getElementById('job-name').style.color = '#7ab0ee';
   anime.timeline({ easing: 'easeOutExpo' })
     .add({
       targets: '#first-name-last-name',
@@ -26,7 +27,17 @@ function initPageAnimations() {
       translateX: [-250, 0],
       duration: 2000,
     });
+  anime.timeline({ easing: 'easeOutExpo' })
+    .add({
+      targets: '#job-name',
+      scale: [0.75, 1],
+      opacity: [0, 1],
+      translateX: [250, 0],
+      duration: 2000,
+      delay: 500,
+    });
 }
+
 
 onMounted(() => {
   initPageAnimations();
@@ -206,6 +217,7 @@ h1 {
 #job-name {
   /* Utilise clamp pour ajuster la taille tout en gardant le texte responsive */
   font-size: clamp(1.5rem, 20vw, 8rem);
+  color: rgba(0, 0, 0, 0);
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;

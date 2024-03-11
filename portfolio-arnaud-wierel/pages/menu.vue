@@ -14,7 +14,7 @@
 export default {
     methods: {
         toggleMenu() {
-            this.$router.push('/');
+            this.$router.push('/home');
         },
     },
 };
