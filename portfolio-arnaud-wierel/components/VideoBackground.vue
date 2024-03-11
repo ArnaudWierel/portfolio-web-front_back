@@ -40,7 +40,7 @@ onMounted(() => {
     // Sur le scroll de la page, on réduit l'opacité de la vidéo
     window.addEventListener('scroll', () => {
         const newOpacity = 1 - window.scrollY / 800;
-        video.value.style.opacity = newOpacity > 0 ? newOpacity : 0; // S'assurer que l'opacité ne devient pas négative
+        videoBg.value.style.opacity = newOpacity;
     });
 });
 </script>

@@ -1,10 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import gsap from 'gsap';
 import anime from 'animejs';
 import { useNuxtApp } from '#app';
-
+import { TextPlugin } from "gsap/TextPlugin";
+//-------------------------------------------------------------------------
 const router = useRouter();
-
 const isMenuVisible = ref(false);
 const projects = ref([
   { id: 1, title: 'Project 1', description: 'Project 1 description' },
@@ -12,10 +13,68 @@ const projects = ref([
   { id: 3, title: 'Project 3', description: 'Project 3 description' },
 ]);
 
+gsap.registerPlugin(TextPlugin);
+//-------------------------------------------------------------------------
+const jobNameAnimation = () => {
+  const jobNameText = document.querySelector('.job-name-text');
+  const originalText = jobNameText.textContent;
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  let randomText = [...originalText].map(char => 
+    char === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]
+  ).join('');
+
+  jobNameText.textContent = randomText;
+
+  jobNameText.addEventListener('mouseenter', () => {
+    gsap.to(jobNameText, {
+      duration: 1.5,
+      text: {value: originalText},
+      ease: "none",
+      color: "#044894",
+    });
+  });
+
+  jobNameText.addEventListener('mouseleave', () => {
+    randomText = [...originalText].map(char => 
+      char === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]
+    ).join('');
+
+    gsap.to(jobNameText, {
+      duration: 1.5,
+      text: {value: randomText, rtl: true},
+      ease: "none",
+      color: "#7ab0ee",
+    });
+  });
+};
+//-------------------------------------------------------------------------
+const animateNameEnter = () => {
+  gsap.to('#first-name-last-name', {
+    duration: 0.5,
+    scale: 0.9, // Agrandit légèrement
+    filter: 'blur(2px)', // Supprime progressivement l'effet de flou
+    color: '#044894', // Change la couleur du texte
+    textShadow: '0px 0px 15px rgba(0, 0, 0, 0.5)', // Ajoute une ombre portée dynamique
+    ease: 'power2.out',
+  });
+};
+
+const animateNameLeave = () => {
+  gsap.to('#first-name-last-name', {
+    duration: 0.5,
+    scale: 1, // Revient à la taille normale
+    filter: 'blur(0px)', // Réapplique un léger effet de flou
+    color: '#7ab0ee', // Réinitialise la couleur du texte
+    textShadow: '0px 0px 0px rgba(0, 0, 0, 0)', // Supprime l'ombre portée
+    ease: 'power2.in',
+  });
+};
+//-------------------------------------------------------------------------
 const toggleMenu = () => {
   router.push('/menu');
 };
-
+//-------------------------------------------------------------------------
 function initPageAnimations() {
   document.getElementById('first-name-last-name').style.color = '#7ab0ee';
   document.getElementById('job-name').style.color = '#7ab0ee';
@@ -37,13 +96,21 @@ function initPageAnimations() {
       delay: 500,
     });
 }
-
-
+//-------------------------------------------------------------------------
 onMounted(() => {
+  // Appeler ces fonctions lors du survol et de la sortie de survol
   initPageAnimations();
   initGSAPAnimations();
+  initDocumentListeners();
+  
 });
-
+//-------------------------------------------------------------------------
+const initDocumentListeners = () => {
+  document.getElementById('first-name-last-name').addEventListener('mouseenter', animateNameEnter);
+  document.getElementById('first-name-last-name').addEventListener('mouseleave', animateNameLeave);
+  jobNameAnimation();
+};
+//-------------------------------------------------------------------------
 const initGSAPAnimations = () => {
   const { $gsap: gsap, $ScrollTrigger: ScrollTrigger } = useNuxtApp();
 
@@ -117,6 +184,7 @@ const initGSAPAnimations = () => {
     },
   });
 };
+//-------------------------------------------------------------------------
 </script>
 
 <template>
@@ -124,7 +192,7 @@ const initGSAPAnimations = () => {
     <VideoBackground />
     <div class="menu">
       <div class="burger-menu">
-        <Icon id="menu-burger-icon" name="line-md:menu" size="50" @click="toggleMenu" />
+        <Icon id="menu-burger-icon" name="line-md:menu" style="" size="50" @click="toggleMenu" />
       </div>
     </div>
 
@@ -134,7 +202,10 @@ const initGSAPAnimations = () => {
           Arnaud Wierel
         </h1>
 
-        <h1 id="job-name">Developer Web Front and Back</h1>
+        <h1 id="job-name">
+  <span class="job-name-text">Developer Web Front and Back</span>
+</h1>
+
       </div>
 
       <div class="projects">
@@ -212,6 +283,7 @@ h1 {
   /* Limite la largeur à celle du contenu */
   box-sizing: border-box;
   /* Assurez-vous que le padding est inclus dans la largeur */
+  filter: blur(0px); /* État initial légèrement flou */
 }
 
 #job-name {
@@ -223,5 +295,23 @@ h1 {
   justify-content: flex-end;
   margin-right: 5vw;
   text-align: right;
+}
+
+#menu-burger-icon {
+  color: #7ab0ee;
+}
+
+.typing-cursor {
+  animation: blinkCursor 0.75s step-end infinite;
+}
+
+@keyframes blinkCursor {
+  from, to { color: transparent; }
+  50% { color: black; }
+}
+
+#job-name span {
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>
