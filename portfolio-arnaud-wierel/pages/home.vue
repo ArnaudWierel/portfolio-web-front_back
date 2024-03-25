@@ -95,6 +95,8 @@ function initPageAnimations() {
       duration: 2000,
       delay: 500,
     });
+
+  
 }
 //-------------------------------------------------------------------------
 onMounted(() => {
@@ -118,21 +120,23 @@ const initGSAPAnimations = () => {
 
   projects.value.forEach((project, index) => {
     gsap.fromTo(`#project-${project.id}`,
-      { y: 30, opacity: 0 },
+      { y: 50, opacity: 0, scale: 0.5 }, // Commence avec une opacité de 0 et une échelle réduite
       {
         y: 0,
         opacity: 1,
+        scale: 1, // Animer vers une opacité complète et l'échelle normale
         duration: 1,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: `#project-${project.id}`,
-          start: 'top 80%',
+          start: 'top 30%', // Commence l'animation un peu plus tôt
           end: 'bottom 20%',
-          toggleActions: 'play none none reverse', // Ajoutez cette ligne
+          toggleActions: 'play none none reverse',
           markers: true,
         }
       });
   });
+
 
   // quand le #first-name-last-name disparait de on fait une animation et quand il revient on fait une autre animation
   ScrollTrigger.create({
@@ -183,6 +187,22 @@ const initGSAPAnimations = () => {
       });
     },
   });
+
+  // Animation avec ScrollTrigger pour #titre-projet
+  gsap.from('#titre-projet', {
+    scrollTrigger: {
+      trigger: '#titre-projet',
+      start: 'top 10%', // Démarre l'animation un peu plus tôt
+      end: 'top center', // Définit la fin de l'animation pour mieux contrôler sa réversibilité
+      toggleActions: 'play none none reverse', // Joue l'animation à l'entrée et la réinitialise quand on remonte
+      markers: true, // À enlever ou commenter en production
+    },
+    opacity: 0,
+    y: -50,
+    duration: 0.5,
+    ease: 'power3.out',
+  });
+
 };
 //-------------------------------------------------------------------------
 </script>
@@ -209,8 +229,8 @@ const initGSAPAnimations = () => {
       </div>
 
       <div class="projects">
-        <h2>Projects</h2>
-        <div class="project" v-for="project in projects" :key="project.id" :id="`project-${project.id}`">
+        <h1 id="titre-projet" class="project">Projects</h1>
+        <div class="project listproject" v-for="project in projects" :key="project.id" :id="`project-${project.id}`">
           <h3>{{ project.title }}</h3>
           <p>{{ project.description }}</p>
         </div>
@@ -222,7 +242,9 @@ const initGSAPAnimations = () => {
 <style>
 
 .projects {
-  min-height: 100vh; /* Assurez-vous que chaque projet est assez haut pour le défilement */
+  min-height: 150vh; /* Assurez-vous que chaque projet est assez haut pour le défilement */
+  /*faire un margin top négtif pour que le titre du projet soit en haut de la page, mais il faut qu'il s'adapt à la taille de l'écran*/
+  transform: translateY(-300px);
 }
 
 img {
@@ -235,6 +257,15 @@ h1 {
   font-family: Tusker Grotesk, sans-serif;
   font-weight: 900;
   color: #93c7ff;
+}
+
+#titre-projet {
+  font-size: 10rem;
+  margin-bottom: 50px;
+  color : #044894;
+  display: block;
+  text-align: center;
+  position: sticky;
 }
 
 .burger-menu {
@@ -314,4 +345,32 @@ h1 {
   display: inline-block;
   vertical-align: middle;
 }
+
+.project {
+  font-size: 1.2rem;
+  /* Ajustez la taille de la police */
+  margin: 20px 0;
+  /* Ajoutez de la marge autour de chaque projet */
+  transition: transform 0.3s ease-out;
+  /* Animation fluide */
+}
+
+.listproject{
+  display: flex;
+  flex-direction: column;
+}
+
+.project h3 {
+  font-size: 2rem;
+  /* Taille de la police pour le titre du projet */
+  color: #044894;
+  /* Couleur du titre */
+}
+
+.project p {
+  margin-top: 10px;
+  /* Espace entre le titre et la description */
+}
+
+
 </style>
