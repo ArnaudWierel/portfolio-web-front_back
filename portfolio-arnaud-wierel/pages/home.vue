@@ -118,23 +118,24 @@ const initGSAPAnimations = () => {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  projects.value.forEach((project, index) => {
-    gsap.fromTo(`#project-${project.id}`,
-      { y: 50, opacity: 0, scale: 0.5 }, // Commence avec une opacité de 0 et une échelle réduite
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1, // Animer vers une opacité complète et l'échelle normale
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: `#project-${project.id}`,
-          start: 'top 30%', // Commence l'animation un peu plus tôt
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse',
-          markers: true,
-        }
-      });
+  // Projects animation timeline
+  const projectsTimeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#titre-projet',
+      start: 'top 8%', // Adjust these values as needed
+      end: 'bottom top',
+      toggleActions: 'play none none reverse',
+    },
+    defaults: { duration: 1, ease: 'power3.out' }, // Default animation properties
+  });
+
+  // Iterate over each project and add it to the timeline
+  projects.value.forEach((project) => {
+    projectsTimeline.fromTo(`#project-${project.id}`, 
+      { y: 50, opacity: 0, scale: 0.5 },
+      { y: 0, opacity: 1, scale: 1 }, 
+      '-=0.75' // Overlap animations slightly
+    );
   });
 
 
@@ -192,7 +193,7 @@ const initGSAPAnimations = () => {
   gsap.from('#titre-projet', {
     scrollTrigger: {
       trigger: '#titre-projet',
-      start: 'top 10%', // Démarre l'animation un peu plus tôt
+      start: 'top 5%', // Démarre l'animation un peu plus tôt
       end: 'top center', // Définit la fin de l'animation pour mieux contrôler sa réversibilité
       toggleActions: 'play none none reverse', // Joue l'animation à l'entrée et la réinitialise quand on remonte
       markers: true, // À enlever ou commenter en production
@@ -242,11 +243,10 @@ const initGSAPAnimations = () => {
 <style>
 
 .projects {
-  min-height: 150vh; /* Assurez-vous que chaque projet est assez haut pour le défilement */
+  min-height: 100vh; /* Assurez-vous que chaque projet est assez haut pour le défilement */
   /*faire un margin top négtif pour que le titre du projet soit en haut de la page, mais il faut qu'il s'adapt à la taille de l'écran*/
-  transform: translateY(-300px);
+  transform: translateY(calc(-1 * (40vh - 10rem)));
 }
-
 img {
   width: 200px;
   height: 200px;
@@ -266,6 +266,7 @@ h1 {
   display: block;
   text-align: center;
   position: sticky;
+  z-index: 19;
 }
 
 .burger-menu {
@@ -326,6 +327,7 @@ h1 {
   justify-content: flex-end;
   margin-right: 5vw;
   text-align: right;
+  z-index: 20;
 }
 
 #menu-burger-icon {
