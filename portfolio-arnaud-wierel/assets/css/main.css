@@ -1,0 +1,63 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("../../assets/font/TuskerGroteskFont/TuskerGrotesk-3500Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Neue Montreal";
+  src: url("~/assets/font/NeueMontreal/NeueMontreal-Regular.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Migra";
+  src: url("~/assets/font/Migra/Migra-Extralight.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Maelstrom";
+  src: url("~/assets/font/Maelstrom/MaelstromBold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+html {
+  background-color: #7ab0ee;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.5s;
+}
+
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
+
+::-webkit-scrollbar {
+  display: none;
+  /* Hide scrollbar for Chrome, Safari and Opera */
+}
+
+body {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  /* Prevent text selection */
+  overflow-y: auto;
+  /* Assurez-vous que le défilement est activé */
+}/*# sourceMappingURL=main.css.map */
