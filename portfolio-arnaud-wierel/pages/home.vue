@@ -46,7 +46,12 @@ const initAnimations = () => {
     .from('.hero .eyebrow', { opacity: 0, y: 20 })
     .from('.hero-title', { opacity: 0, y: 40 }, '-=0.4')
     .from('.hero-lead', { opacity: 0, y: 30 }, '-=0.5')
-    .from('.hero-cta .btn', { opacity: 0, y: 20, stagger: 0.1 }, '-=0.5');
+    .fromTo(
+      '.hero-cta .btn',
+      { autoAlpha: 0, y: 20 },
+      { autoAlpha: 1, y: 0, stagger: 0.1 },
+      '-=0.5'
+    );
 
   const animateCards = (selector: string) => {
     gsap.utils.toArray<HTMLElement>(selector).forEach((element, index) => {
@@ -175,12 +180,12 @@ onMounted(() => {
         <p class="eyebrow">creative developer</p>
         <h1 class="hero-title">Arnaud Wierel</h1>
         <p class="hero-lead">
-          On repart de zéro pour construire un portfolio clair, performant et élégant. Cette section servira bientôt
-          d’intro immersive.
+          J’imagine et réalise des interfaces immersives, élégantes et performantes. Motion design, story telling et engineering
+          avancé pour donner vie à vos concepts.
         </p>
         <div class="hero-cta">
-          <NuxtLink to="/contact" class="btn primary">Me contacter</NuxtLink>
-          <NuxtLink to="/project" class="btn ghost">Voir mes projets</NuxtLink>
+          <NuxtLink to="/contact" class="btn primary">Commencer un projet</NuxtLink>
+          <NuxtLink to="/project" class="btn ghost">Découvrir mes réalisations</NuxtLink>
         </div>
       </section>
 
