@@ -1,575 +1,821 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import gsap from 'gsap';
-import anime from 'animejs';
-import { useNuxtApp } from '#app';
-import { TextPlugin } from 'gsap/TextPlugin';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import type { Project } from '~/assets/data/projects';
 import { projectsData } from '~/assets/data/projects';
-//-------------------------------------------------------------------------
-const router = useRouter();
+
 const projects = ref<Project[]>(projectsData);
+const highlights = ref([
+  {
+    title: 'Expériences immersives',
+    description: 'Concept, motion design et micro-interactions pour des landing pages premium.',
+    badge: 'Motion / GSAP'
+  },
+  {
+    title: 'Stack moderne',
+    description: 'Nuxt 3, Vue 3, TypeScript, SSR/SSG optimisé pour la performance et le SEO.',
+    badge: 'Front & Back'
+  },
+  {
+    title: 'Accompagnement complet',
+    description: 'De l’idéation au déploiement : design system, intégration, CI/CD.',
+    badge: 'End-to-end'
+  }
+]);
 
-gsap.registerPlugin(TextPlugin);
-//-------------------------------------------------------------------------
-const jobNameAnimation = () => {
-  const jobNameText = document.querySelector('.job-name-text');
-  const originalText = jobNameText.textContent;
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  let randomText = [...originalText].map(char => 
-    char === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]
-  ).join('');
-
-  jobNameText.textContent = randomText;
-
-  jobNameText.addEventListener('mouseenter', () => {
-    gsap.to(jobNameText, {
-      duration: 1.5,
-      text: {value: originalText},
-      ease: "none",
-      color: "#044894",
-    });
-  });
-
-  jobNameText.addEventListener('mouseleave', () => {
-    randomText = [...originalText].map(char => 
-      char === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]
-    ).join('');
-
-    gsap.to(jobNameText, {
-      duration: 1.5,
-      text: {value: randomText, rtl: true},
-      ease: "none",
-      color: "#7ab0ee",
-    });
-  });
-};
-//-------------------------------------------------------------------------
-const animateNameEnter = () => {
-  gsap.to('#first-name-last-name', {
-    duration: 0.5,
-    scale: 0.9, // Agrandit légèrement
-    filter: 'blur(2px)', // Supprime progressivement l'effet de flou
-    color: '#044894', // Change la couleur du texte
-    textShadow: '0px 0px 15px rgba(0, 0, 0, 0.5)', // Ajoute une ombre portée dynamique
-    ease: 'power2.out',
-  });
+const isDark = ref(true);
+const applyTheme = () => {
+  document.documentElement.dataset.theme = isDark.value ? 'dark' : 'light';
 };
 
-const animateNameLeave = () => {
-  gsap.to('#first-name-last-name', {
-    duration: 0.5,
-    scale: 1, // Revient à la taille normale
-    filter: 'blur(0px)', // Réapplique un léger effet de flou
-    color: '#7ab0ee', // Réinitialise la couleur du texte
-    textShadow: '0px 0px 0px rgba(0, 0, 0, 0)', // Supprime l'ombre portée
-    ease: 'power2.in',
-  });
+const toggleTheme = () => {
+  isDark.value = !isDark.value;
+  applyTheme();
 };
-//-------------------------------------------------------------------------
-const toggleMenu = () => {
-  router.push('/menu');
-};
-//-------------------------------------------------------------------------
-function initPageAnimations() {
-  document.getElementById('first-name-last-name').style.color = '#7ab0ee';
-  document.getElementById('job-name').style.color = '#7ab0ee';
-  anime.timeline({ easing: 'easeOutExpo' })
-    .add({
-      targets: '#first-name-last-name',
-      scale: [0.75, 1],
-      opacity: [0, 1],
-      translateX: [-250, 0],
-      duration: 2000,
-    });
-  anime.timeline({ easing: 'easeOutExpo' })
-    .add({
-      targets: '#job-name',
-      scale: [0.75, 1],
-      opacity: [0, 1],
-      translateX: [250, 0],
-      duration: 2000,
-      delay: 500,
-    });
 
-  
-}
-//-------------------------------------------------------------------------
-onMounted(() => {
-  // Appeler ces fonctions lors du survol et de la sortie de survol
-  initPageAnimations();
-  initGSAPAnimations();
-  initDocumentListeners();
-  
-});
-//-------------------------------------------------------------------------
-const initDocumentListeners = () => {
-  document.getElementById('first-name-last-name').addEventListener('mouseenter', animateNameEnter);
-  document.getElementById('first-name-last-name').addEventListener('mouseleave', animateNameLeave);
-  jobNameAnimation();
-};
-//-------------------------------------------------------------------------
-const initGSAPAnimations = () => {
-  const { $gsap: gsap, $ScrollTrigger: ScrollTrigger } = useNuxtApp();
-
+const initAnimations = () => {
   gsap.registerPlugin(ScrollTrigger);
 
-  const headerTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: '.projects-header',
-      start: 'top 85%',
-      end: 'bottom center',
-      toggleActions: 'play none none reverse'
-    }
-  });
+  gsap.timeline({ defaults: { ease: 'power3.out', duration: 0.8 } })
+    .from('.site-header .brand', { opacity: 0, y: -20 })
+    .from('.site-header .main-nav', { opacity: 0, y: -20 }, '-=0.5')
+    .from('.site-header .header-actions', { opacity: 0, y: -20 }, '-=0.5');
 
-  headerTimeline
-    .from('.eyebrow', {
-      opacity: 0,
-      y: 30,
-      duration: 0.6,
-      ease: 'power3.out'
-    })
-    .from(
-      '#titre-projet',
-      {
-        opacity: 0,
-        y: 80,
-        scale: 0.9,
-        duration: 1,
-        ease: 'power4.out'
-      },
-      '-=0.3'
-    )
-    .from(
-      '.projects-intro',
-      {
+  gsap.timeline({ defaults: { ease: 'power3.out', duration: 0.9 } })
+    .from('.hero .eyebrow', { opacity: 0, y: 20 })
+    .from('.hero-title', { opacity: 0, y: 40 }, '-=0.4')
+    .from('.hero-lead', { opacity: 0, y: 30 }, '-=0.5')
+    .from('.hero-cta .btn', { opacity: 0, y: 20, stagger: 0.1 }, '-=0.5');
+
+  const animateCards = (selector: string) => {
+    gsap.utils.toArray<HTMLElement>(selector).forEach((element, index) => {
+      gsap.from(element, {
         opacity: 0,
         y: 40,
-        duration: 0.8,
-        ease: 'power3.out'
-      },
-      '-=0.4'
-    );
-
-  // Projects animation timeline
-  const projectsTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: '#titre-projet',
-      start: 'top 8%', // Adjust these values as needed
-      end: 'bottom top',
-      toggleActions: 'play none none reverse',
-    },
-    defaults: { duration: 1, ease: 'power3.out' }, // Default animation properties
+        duration: 0.7,
+        delay: index * 0.05,
+        scrollTrigger: {
+          trigger: element,
+          start: 'top 85%'
+        }
+    });
   });
-
-  // Iterate over each project and add it to the timeline
-  projectsTimeline.fromTo(
-    '.project-card',
-    { y: 80, opacity: 0, rotateX: 12, transformOrigin: 'top center' },
-    {
-      y: 0,
-      opacity: 1,
-      rotateX: 0,
-      duration: 1.2,
-      ease: 'power3.out',
-      stagger: 0.25
-    },
-    '-=0.5'
-  );
-
-
-  // quand le #first-name-last-name disparait de on fait une animation et quand il revient on fait une autre animation
-  ScrollTrigger.create({
-    trigger: '#first-name-last-name',
-    start: 'top 80%',
-    end: 'bottom 20%',
-    onLeave: () => {
-      anime({
-        targets: '#first-name-last-name',
-        scale: 0.75,
-        opacity: 0,
-        translateX: -250,
-        duration: 2000,
-      });
-    },
-    onEnterBack: () => {
-      anime({
-        targets: '#first-name-last-name',
-        scale: 1,
-        opacity: 1,
-        translateX: 0,
-        duration: 2000,
-      });
-    },
-  });
-
-  // quand le #job-name disparait de on fait une animation et quand il revient on fait une autre animation
-  ScrollTrigger.create({
-    trigger: '#job-name',
-    start: 'top 80%',
-    end: 'bottom 20%',
-    onLeave: () => {
-      anime({
-        targets: '#job-name',
-        scale: 0.75,
-        opacity: 0,
-        translateX: 250,
-        duration: 2000,
-      });
-    },
-    onEnterBack: () => {
-      anime({
-        targets: '#job-name',
-        scale: 1,
-        opacity: 1,
-        translateX: 0,
-        duration: 2000,
-      });
-    },
-  });
-
 };
-//-------------------------------------------------------------------------
+
+  animateCards('.about-media');
+  animateCards('.about-content');
+  animateCards('.highlight-card');
+  animateCards('.project-card');
+  animateCards('.contact-cta');
+
+  const stackSection = document.querySelector('.stack');
+  const projectsSection = document.querySelector('.projects');
+  if (stackSection && projectsSection) {
+    const cards = stackSection.querySelectorAll('.stack-card');
+    gsap.set(cards, { opacity: 0.2, scale: 0.92 });
+    gsap.set(projectsSection, { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0 });
+
+    const stackTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: stackSection,
+        start: 'top 20%',
+        end: () => '+=' + cards.length * 260,
+        scrub: 1.2,
+        pin: true,
+        anticipatePin: 1,
+        pinSpacing: true
+      }
+    });
+
+    cards.forEach((card, index) => {
+      stackTimeline
+        .to(
+          card,
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.6,
+            ease: 'power2.out'
+          },
+          index
+        )
+        .to(
+          card,
+          {
+            opacity: 0.15,
+            scale: 0.9,
+            duration: 0.6,
+            ease: 'power2.in'
+          },
+          index + 0.6
+    );
+  });
+
+    stackTimeline
+      .to(
+        stackSection,
+        {
+          opacity: 0.3,
+          scale: 0.85,
+          yPercent: -10,
+          filter: 'blur(6px)',
+          duration: 0.8,
+          ease: 'power2.inOut'
+        },
+        cards.length - 0.3
+      )
+      .to(
+        projectsSection,
+        {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          opacity: 1,
+          duration: 0.9,
+          ease: 'power2.out'
+        },
+        cards.length - 0.4
+      );
+  }
+};
+
+onMounted(() => {
+  applyTheme();
+  initAnimations();
+});
 </script>
 
 <template>
   <div class="home">
-    <VideoBackground />
-    <div class="menu">
-      <div class="burger-menu">
-        <Icon id="menu-burger-icon" name="line-md:menu" style="" size="50" @click="toggleMenu" />
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-mark">AW</span>
+        <span class="brand-name">Arnaud Wierel</span>
       </div>
+      <nav class="main-nav" aria-label="Navigation principale">
+        <NuxtLink to="/" class="nav-link">Home</NuxtLink>
+        <NuxtLink to="/about" class="nav-link">About</NuxtLink>
+        <NuxtLink to="/project" class="nav-link">Projects</NuxtLink>
+        <NuxtLink to="/contact" class="nav-link">Contact</NuxtLink>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" @click="toggleTheme" :aria-label="`Basculer en thème ${isDark ? 'clair' : 'sombre'}`">
+          <Icon :name="isDark ? 'ph:sun-bold' : 'ph:moon-bold'" size="22" />
+        </button>
+        <NuxtLink to="/contact" class="btn primary small">Parler d’un projet</NuxtLink>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="hero">
+        <div class="hero-media" aria-hidden="true">
+          <VideoBackground scoped />
+          <div class="hero-media__gradient"></div>
     </div>
 
-    <div class="page">
-      <div class="landing-text">
-        <h1 id="first-name-last-name" @mouseenter="animateNameEnter" @mouseleave="animateNameLeave">
-          Arnaud Wierel
-        </h1>
-
-        <h1 id="job-name">
-  <span class="job-name-text">Developer Web Front and Back</span>
-</h1>
-
-      </div>
-
-      <section class="projects">
-        <div class="projects-header">
-          <p class="eyebrow">Sélection</p>
-          <h1 id="titre-projet">Projects</h1>
-          <p class="projects-intro">
-            Quelques réalisations représentatives mêlant motion design, expériences immersives et interfaces produit. Chaque projet est pensé comme une histoire interactive.
-          </p>
-        </div>
-        <div
-          class="project-card"
-          v-for="project in projects"
-          :key="project.slug"
-          :id="`project-${project.slug}`"
-        >
-          <NuxtImg
-            :src="project.cover"
-            :alt="`Mockup du projet ${project.title}`"
-            format="webp"
-            class="project-cover"
-            width="1200"
-            height="800"
-          />
-          <div class="project-content">
-            <div class="project-meta">
-              <span class="project-year">{{ project.year }}</span>
-              <span class="project-role">{{ project.role }}</span>
-            </div>
-            <h3>{{ project.title }}</h3>
-            <p>{{ project.description }}</p>
-            <div class="project-tags">
-              <span v-for="tag in project.tags" :key="tag" class="tag">
-                {{ tag }}
-              </span>
-            </div>
-            <div class="project-actions">
-              <NuxtLink
-                v-if="project.link"
-                :to="project.link"
-                target="_blank"
-                rel="noopener"
-                class="project-link"
-              >
-                Voir le case study
-              </NuxtLink>
-              <NuxtLink :to="`/project/${project.slug}`" class="project-link secondary">
-                Détails
-              </NuxtLink>
-            </div>
-          </div>
+        <p class="eyebrow">creative developer</p>
+        <h1 class="hero-title">Arnaud Wierel</h1>
+        <p class="hero-lead">
+          On repart de zéro pour construire un portfolio clair, performant et élégant. Cette section servira bientôt
+          d’intro immersive.
+        </p>
+        <div class="hero-cta">
+          <NuxtLink to="/contact" class="btn primary">Me contacter</NuxtLink>
+          <NuxtLink to="/project" class="btn ghost">Voir mes projets</NuxtLink>
         </div>
       </section>
+
+      <section class="about">
+        <div class="about-media">
+          <img src="/assets/aboutmedia.png" alt="Disponible pour de nouveaux projets" />
+        </div>
+        <div class="about-content">
+          <p class="eyebrow">à propos</p>
+          <h2>Un développeur passionné par l’esthétique et la perf</h2>
+          <p>
+            Je crois aux expériences web raffinées, où motion design, narration et engineering travaillent ensemble pour raconter
+            quelque chose de mémorable. J’accompagne les studios, agences et marques sur des projets haut de gamme.
+          </p>
+          <div class="about-timeline">
+            <div class="about-timeline__item" v-for="milestone in ['2021 — Freelance', '2023 — Studio Neo', '2025 — Open to Work']" :key="milestone">
+              {{ milestone }}
+            </div>
+      </div>
     </div>
+      </section>
+
+      <section class="highlights">
+        <p class="eyebrow">ce que je fais</p>
+        <h2 class="highlights-title">Créer des expériences numériques soignées</h2>
+        <div class="highlights-grid">
+          <article
+            v-for="(highlight, index) in highlights"
+            :key="highlight.title"
+            class="highlight-card"
+            :style="{ animationDelay: `${index * 0.2}s` }"
+          >
+            <span class="highlight-badge">{{ highlight.badge }}</span>
+            <h3>{{ highlight.title }}</h3>
+            <p>{{ highlight.description }}</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="stack">
+        <p class="eyebrow">stack & outils</p>
+        <h2 class="stack-title">Technos que j’utilise au quotidien</h2>
+        <div class="stack-grid">
+          <article class="stack-card">
+            <h3>Core Front</h3>
+            <p>Nuxt 3 · Vue 3 · TypeScript · Vite · Nuxt UI.</p>
+          </article>
+          <article class="stack-card">
+            <h3>Motion</h3>
+            <p>GSAP · Lenis · SplitType · Three basics · WebGL shaders.</p>
+          </article>
+          <article class="stack-card">
+            <h3>Backend & Ops</h3>
+            <p>Nitro · Node · Supabase · GitHub Actions · Cloudflare Pages.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="projects">
+        <div class="section-heading">
+          <p class="eyebrow">portfolio</p>
+          <h2>Projets finalisés</h2>
+          <p class="section-copy">
+            Sélection de réalisations terminées qui illustrent mon approche entre storytelling, motion design et rigueur technique.
+          </p>
+      </div>
+
+        <div class="projects-grid">
+          <article v-for="project in projects" :key="project.slug" class="project-card">
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.description }}</p>
+            <ul class="project-tags">
+              <li v-for="tag in project.tags" :key="tag">{{ tag }}</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="contact-cta">
+        <div>
+          <p class="eyebrow">discutons</p>
+          <h2>Prêt à imaginer votre prochain projet ?</h2>
+          <p>J’accompagne studios et marques sur des expériences premium. Nous pouvons parler d’un projet en cours ou d’une idée.</p>
+      </div>
+        <div class="contact-actions">
+          <NuxtLink to="/contact" class="btn primary">Planifier un call</NuxtLink>
+          <NuxtLink to="/project" class="btn ghost">Voir mon travail</NuxtLink>
+    </div>
+      </section>
+    </main>
   </div>
 </template>
 
-<style>
-
-section.projects {
+<style scoped>
+.home {
+  position: relative;
   min-height: 100vh;
-  padding: clamp(2rem, 6vw, 6rem);
-  margin-top: clamp(4rem, 12vw, 18rem);
-  position: relative;
-}
-img {
-  width: 200px;
-  height: 200px;
-  margin-bottom: 50px;
+  color: var(--text-primary);
+  background: var(--bg-primary);
 }
 
-h1 {
-  font-family: Tusker Grotesk, sans-serif;
-  font-weight: 900;
-  color: #93c7ff;
-}
-
-#titre-projet {
-  font-size: clamp(4rem, 12vw, 10rem);
-  margin-bottom: 1.5rem;
-  color: #044894;
-  display: block;
-  text-align: left;
-}
-
-.projects-header {
-  max-width: 960px;
-  margin: 0 auto 4rem auto;
-  text-align: left;
-  position: relative;
-  padding-left: clamp(0rem, 3vw, 2.5rem);
-}
-
-.projects-header::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 15%;
-  width: clamp(60px, 12vw, 140px);
-  height: clamp(60px, 12vw, 140px);
-  background: radial-gradient(circle at 30% 30%, rgba(89, 166, 254, 0.45), transparent 65%);
-  filter: blur(12px);
-  z-index: -1;
-}
-
-.projects-header::after {
-  content: '';
-  position: absolute;
-  left: clamp(-3rem, -2vw, -1rem);
-  top: 50%;
-  width: clamp(120px, 35vw, 360px);
-  height: 2px;
-  background: linear-gradient(90deg, rgba(89, 166, 254, 0), rgba(89, 166, 254, 0.9), rgba(89, 166, 254, 0));
-  opacity: 0.6;
-}
-
-.projects-intro {
-  color: #9ec5ff;
-  font-size: clamp(1rem, 2vw, 1.4rem);
-  line-height: 1.5;
-}
-
-.eyebrow {
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  color: #59a6fe;
-  margin-bottom: 0.5rem;
-}
-
-.burger-menu {
+.site-header {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  align-items: flex-end;
-  padding: 20px;
-  /* mettre l'icône au premier plan */
-  z-index: 100;
-  position: relative;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: clamp(1rem, 4vw, 2rem);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(24px);
+  background: var(--header-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.icon {
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.brand-mark {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(89, 166, 254, 0.2);
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.main-nav {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.router-link-active {
+  color: var(--text-primary);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-toggle {
+  background: rgba(89, 166, 254, 0.15);
+  border: 1px solid rgba(89, 166, 254, 0.3);
+  border-radius: 999px;
+  padding: 0.4rem 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  transition: background 0.3s ease;
+  color: var(--accent-muted);
+}
+
+.theme-toggle:hover {
+  background: rgba(89, 166, 254, 0.3);
 }
 
 .page {
+  position: relative;
+  z-index: 5;
+  padding: clamp(2rem, 8vw, 6rem);
   display: flex;
   flex-direction: column;
-  height: 100%;
+  gap: clamp(2rem, 6vw, 4rem);
 }
 
-.landing-text {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100vh;
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.8rem;
+  color: var(--text-eyebrow);
 }
 
-#first-name-last-name {
-  margin-left: 5vw;
-  font-size: clamp(2rem, 25vw, 15rem);
-  margin-top: -7vh;
+.hero-title {
+  font-size: clamp(3rem, 15vw, 10rem);
+  font-family: 'Tusker Grotesk', sans-serif;
+  line-height: 0.9;
+  margin: 0.5rem 0;
+  color: #f8fbff;
+}
+
+.hero {
+  position: relative;
+  padding: clamp(2rem, 4vw, 3rem);
+  border-radius: clamp(1.5rem, 4vw, 3rem);
+  overflow: hidden;
+  background: var(--hero-bg);
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.hero-media__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(1, 11, 27, 0.5), rgba(1, 11, 27, 0.95) 60%);
+}
+
+.hero > *:not(.hero-media) {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-lead {
+  max-width: 560px;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.hero .eyebrow {
+  color: rgba(247, 250, 255, 0.7);
+}
+
+.hero .hero-lead {
+  color: #d4e7ff;
+}
+
+.hero .btn.primary {
+  background: #59a6fe;
+  border-color: #59a6fe;
+  color: #011a36;
+}
+
+.hero .btn.primary:hover {
+  background: transparent;
+  color: #59a6fe;
+}
+
+.hero .btn.ghost {
+  border-color: rgba(247, 250, 255, 0.5);
+  color: #f7faff;
+}
+
+.hero .btn.ghost:hover {
+  background: rgba(247, 250, 255, 0.15);
+}
+
+.hero-cta {
   display: flex;
-  align-items: flex-start;
   flex-wrap: wrap;
-  margin-bottom: clamp(30vh, 10vw, 20vh);
-  color: rgba(0, 0, 0, 0);
-  /* Initial state is transparent, animation will fade in */
-  transition: text-shadow 0.3s ease-in-out;
-  /* Smooth transition for text-shadow */
-  padding: 0 1vw;
-  /* Ajoutez un padding pour réduire la hitbox */
-  inline-size: fit-content;
-  /* Limite la largeur à celle du contenu */
-  box-sizing: border-box;
-  /* Assurez-vous que le padding est inclus dans la largeur */
-  filter: blur(0px); /* État initial légèrement flou */
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-#job-name {
-  /* Utilise clamp pour ajuster la taille tout en gardant le texte responsive */
-  font-size: clamp(1.5rem, 20vw, 8rem);
-  color: rgba(0, 0, 0, 0);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  margin-right: 5vw;
-  text-align: right;
-  z-index: 20;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.8rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
 }
 
-#menu-burger-icon {
-  color: #7ab0ee;
+.btn.small {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.75rem;
 }
 
-.typing-cursor {
-  animation: blinkCursor 0.75s step-end infinite;
+.btn.primary {
+  background: var(--accent);
+  color: var(--accent-on);
+  border-color: var(--accent);
 }
 
-@keyframes blinkCursor {
-  from, to { color: transparent; }
-  50% { color: black; }
+.btn.primary:hover {
+  background: transparent;
+  color: var(--accent);
 }
 
-#job-name span {
-  display: inline-block;
-  vertical-align: middle;
+.btn.ghost {
+  border-color: rgba(89, 166, 254, 0.4);
+  color: var(--text-primary);
 }
 
-.project-card {
-  background: rgba(0, 11, 28, 0.6);
-  border: 1px solid rgba(89, 166, 254, 0.2);
+.btn.ghost:hover {
+  background: rgba(89, 166, 254, 0.1);
+}
+
+.about {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.about-media {
+  position: relative;
+  min-height: 360px;
   border-radius: 32px;
-  padding: clamp(1.5rem, 4vw, 3rem);
-  margin-bottom: clamp(2rem, 5vw, 4rem);
-  backdrop-filter: blur(20px);
-  transition: transform 0.4s ease, border-color 0.3s ease;
+  overflow: hidden;
+  background: var(--card-bg-strong);
+  animation: aboutGlow 2.5s ease-in-out infinite alternate;
+}
+
+.about-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.about-content h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin: 0.5rem 0;
+}
+
+.about-content p {
+  color: var(--text-muted-strong);
+  line-height: 1.6;
+}
+
+.about-timeline {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.about-timeline__item {
+  border-left: 2px solid rgba(89, 166, 254, 0.5);
+  padding-left: 1rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.highlights-title {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  margin: 0;
+}
+
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.highlight-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: clamp(1rem, 3vw, 2rem);
+  animation: highlightReveal 0.8s ease forwards;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.highlight-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  border-color: rgba(89, 166, 254, 0.4);
+  box-shadow: 0 25px 70px rgba(2, 15, 36, 0.35);
+}
+
+.highlight-badge {
+  display: inline-flex;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(147, 199, 255, 0.5);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--badge-text);
+}
+
+.highlight-card h3 {
+  margin: 0.8rem 0 0.4rem 0;
+  font-size: 1.4rem;
+}
+
+.highlight-card p {
+  color: var(--text-muted-strong);
+  line-height: 1.5;
+}
+
+.stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-height: 50vh;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 2rem);
+  width: min(100%);
+  margin-left: auto;
+  margin-right: auto;
+  background: var(--stack-bg);
+  border-radius: clamp(0.5rem, 2vw, 2rem);
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 40px 80px rgba(1, 9, 22, 0.45);
+  z-index: 5;
+  margin-top: clamp(-2rem, -2vw, -1rem);
+  margin-bottom: clamp(-2rem, -2vw, -1rem);
+}
+
+.stack::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(89, 166, 254, 0.18), transparent 65%);
+  filter: blur(80px);
+  opacity: 0.9;
+  z-index: -1;
+}
+
+.stack-title {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  margin: 0;
+}
+
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(0.8rem, 2vw, 1.5rem);
+}
+
+.stack-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: clamp(0.6rem, 1.5vw, 1.2rem);
+  box-shadow: 0 20px 60px rgba(1, 11, 27, 0.2);
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
   position: relative;
   overflow: hidden;
 }
 
-.project-card:hover {
-  transform: translateY(-10px);
-  border-color: #59a6fe;
-}
-
-.project-card::before {
+.stack-card::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(130deg, rgba(89, 166, 254, 0.18), transparent 60%);
+  background: linear-gradient(120deg, rgba(89, 166, 254, 0.2), transparent 70%);
   opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-.project-card:hover::before {
+.stack-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(89, 166, 254, 0.4);
+  box-shadow: 0 30px 70px rgba(1, 11, 27, 0.35);
+}
+
+.stack-card:hover::after {
   opacity: 1;
 }
 
-.project-cover {
+.section-heading {
+  max-width: 720px;
+}
+
+.section-heading h2 {
+  font-size: clamp(2rem, 6vw, 4rem);
+  margin: 0.5rem 0;
+}
+
+.section-copy {
+  color: var(--text-muted-strong);
+  line-height: 1.5;
+}
+
+.projects {
+  position: relative;
+  z-index: 4;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.project-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 24px;
-  width: 100%;
-  height: clamp(240px, 40vw, 420px);
-  object-fit: cover;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
-.project-content h3 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  color: #f3f7ff;
-  margin-bottom: 0.75rem;
-}
-
-.project-content p {
-  color: #c8dcff;
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-
-.project-meta {
-  display: flex;
-  gap: 1rem;
-  color: #7ab0ee;
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.project-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(89, 166, 254, 0.45);
+  box-shadow: 0 25px 65px rgba(2, 15, 36, 0.35);
 }
 
 .project-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0;
+  list-style: none;
 }
 
-.tag {
-  padding: 0.35rem 0.85rem;
+.project-tags li {
   border: 1px solid rgba(147, 199, 255, 0.4);
   border-radius: 999px;
-  color: #c2dcff;
-  font-size: 0.9rem;
+  padding: 0.25rem 0.8rem;
+  font-size: 0.8rem;
+  color: var(--badge-text);
 }
 
-.project-actions {
+.contact-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(2rem, 4vw, 3rem);
+  border-radius: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  align-items: center;
+}
+
+.contact-cta h2 {
+  margin: 0.4rem 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.contact-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-.project-link {
-  font-family: 'Tusker Grotesk', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.9rem;
-  padding: 0.85rem 1.5rem;
-  border-radius: 999px;
-  border: 1px solid #59a6fe;
-  color: #011a36;
-  background: #59a6fe;
-  transition: background 0.3s ease, color 0.3s ease;
+@media (max-width: 900px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
 }
 
-.project-link:hover {
-  background: transparent;
-  color: #59a6fe;
+@keyframes aboutGlow {
+  from {
+    box-shadow: 0 20px 60px rgba(3, 25, 63, 0.8);
+  }
+  to {
+    box-shadow: 0 30px 70px rgba(3, 25, 63, 0.9);
+  }
 }
 
-.project-link.secondary {
-  background: transparent;
-  color: #59a6fe;
+@keyframes floatingGlow {
+  from {
+    transform: translate3d(-5%, -5%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(5%, 5%, 0) scale(1.1);
+  }
 }
 
-.project-link.secondary:hover {
-  background: rgba(89, 166, 254, 0.15);
+@keyframes highlightReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+<style>
+:root {
+  --bg-primary: #010b1b;
+  --text-primary: #d9eaff;
+  --text-muted: #9fbff7;
+  --text-muted-strong: #a9c7ff;
+  --text-eyebrow: rgba(217, 234, 255, 0.6);
+  --hero-bg: rgba(1, 11, 27, 0.5);
+  --card-bg: rgba(0, 11, 28, 0.7);
+  --card-bg-strong: rgba(0, 11, 28, 0.8);
+  --card-border: rgba(89, 166, 254, 0.2);
+  --header-bg: rgba(1, 11, 27, 0.85);
+  --stack-bg: #010b1b;
+  --accent: #59a6fe;
+  --accent-on: #011a36;
+  --accent-muted: #7ab0ee;
+  --badge-text: #9ec7ff;
 }
 
-
+:root[data-theme='light'] {
+  --bg-primary: #f4f6fb;
+  --text-primary: #0c1b32;
+  --text-muted: #53617a;
+  --text-muted-strong: #3f4c63;
+  --text-eyebrow: rgba(12, 27, 50, 0.5);
+  --hero-bg: rgba(255, 255, 255, 0.9);
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --card-bg-strong: rgba(255, 255, 255, 0.97);
+  --card-border: rgba(12, 27, 50, 0.08);
+  --header-bg: rgba(255, 255, 255, 0.9);
+  --stack-bg: #f6f8ff;
+  --accent: #0052cc;
+  --accent-on: #f7fbff;
+  --accent-muted: #1f3f84;
+  --badge-text: #1f3f84;
+}
 </style>
