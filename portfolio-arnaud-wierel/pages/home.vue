@@ -1,17 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import gsap from 'gsap';
 import anime from 'animejs';
 import { useNuxtApp } from '#app';
-import { TextPlugin } from "gsap/TextPlugin";
+import { TextPlugin } from 'gsap/TextPlugin';
+import type { Project } from '~/assets/data/projects';
+import { projectsData } from '~/assets/data/projects';
 //-------------------------------------------------------------------------
 const router = useRouter();
-const isMenuVisible = ref(false);
-const projects = ref([
-  { id: 1, title: 'Project 1', description: 'Project 1 description' },
-  { id: 2, title: 'Project 2', description: 'Project 2 description' },
-  { id: 3, title: 'Project 3', description: 'Project 3 description' },
-]);
+const projects = ref<Project[]>(projectsData);
 
 gsap.registerPlugin(TextPlugin);
 //-------------------------------------------------------------------------
@@ -118,6 +115,44 @@ const initGSAPAnimations = () => {
 
   gsap.registerPlugin(ScrollTrigger);
 
+  const headerTimeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.projects-header',
+      start: 'top 85%',
+      end: 'bottom center',
+      toggleActions: 'play none none reverse'
+    }
+  });
+
+  headerTimeline
+    .from('.eyebrow', {
+      opacity: 0,
+      y: 30,
+      duration: 0.6,
+      ease: 'power3.out'
+    })
+    .from(
+      '#titre-projet',
+      {
+        opacity: 0,
+        y: 80,
+        scale: 0.9,
+        duration: 1,
+        ease: 'power4.out'
+      },
+      '-=0.3'
+    )
+    .from(
+      '.projects-intro',
+      {
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        ease: 'power3.out'
+      },
+      '-=0.4'
+    );
+
   // Projects animation timeline
   const projectsTimeline = gsap.timeline({
     scrollTrigger: {
@@ -130,13 +165,19 @@ const initGSAPAnimations = () => {
   });
 
   // Iterate over each project and add it to the timeline
-  projects.value.forEach((project) => {
-    projectsTimeline.fromTo(`#project-${project.id}`, 
-      { y: 50, opacity: 0, scale: 0.5 },
-      { y: 0, opacity: 1, scale: 1 }, 
-      '-=0.75' // Overlap animations slightly
-    );
-  });
+  projectsTimeline.fromTo(
+    '.project-card',
+    { y: 80, opacity: 0, rotateX: 12, transformOrigin: 'top center' },
+    {
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      duration: 1.2,
+      ease: 'power3.out',
+      stagger: 0.25
+    },
+    '-=0.5'
+  );
 
 
   // quand le #first-name-last-name disparait de on fait une animation et quand il revient on fait une autre animation
@@ -189,21 +230,6 @@ const initGSAPAnimations = () => {
     },
   });
 
-  // Animation avec ScrollTrigger pour #titre-projet
-  gsap.from('#titre-projet', {
-    scrollTrigger: {
-      trigger: '#titre-projet',
-      start: 'top 5%', // Démarre l'animation un peu plus tôt
-      end: 'top center', // Définit la fin de l'animation pour mieux contrôler sa réversibilité
-      toggleActions: 'play none none reverse', // Joue l'animation à l'entrée et la réinitialise quand on remonte
-      markers: true, // À enlever ou commenter en production
-    },
-    opacity: 0,
-    y: -50,
-    duration: 0.5,
-    ease: 'power3.out',
-  });
-
 };
 //-------------------------------------------------------------------------
 </script>
@@ -229,23 +255,68 @@ const initGSAPAnimations = () => {
 
       </div>
 
-      <div class="projects">
-        <h1 id="titre-projet" class="project">Projects</h1>
-        <div class="project listproject" v-for="project in projects" :key="project.id" :id="`project-${project.id}`">
-          <h3>{{ project.title }}</h3>
-          <p>{{ project.description }}</p>
+      <section class="projects">
+        <div class="projects-header">
+          <p class="eyebrow">Sélection</p>
+          <h1 id="titre-projet">Projects</h1>
+          <p class="projects-intro">
+            Quelques réalisations représentatives mêlant motion design, expériences immersives et interfaces produit. Chaque projet est pensé comme une histoire interactive.
+          </p>
         </div>
-      </div>
+        <div
+          class="project-card"
+          v-for="project in projects"
+          :key="project.slug"
+          :id="`project-${project.slug}`"
+        >
+          <NuxtImg
+            :src="project.cover"
+            :alt="`Mockup du projet ${project.title}`"
+            format="webp"
+            class="project-cover"
+            width="1200"
+            height="800"
+          />
+          <div class="project-content">
+            <div class="project-meta">
+              <span class="project-year">{{ project.year }}</span>
+              <span class="project-role">{{ project.role }}</span>
+            </div>
+            <h3>{{ project.title }}</h3>
+            <p>{{ project.description }}</p>
+            <div class="project-tags">
+              <span v-for="tag in project.tags" :key="tag" class="tag">
+                {{ tag }}
+              </span>
+            </div>
+            <div class="project-actions">
+              <NuxtLink
+                v-if="project.link"
+                :to="project.link"
+                target="_blank"
+                rel="noopener"
+                class="project-link"
+              >
+                Voir le case study
+              </NuxtLink>
+              <NuxtLink :to="`/project/${project.slug}`" class="project-link secondary">
+                Détails
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <style>
 
-.projects {
-  min-height: 100vh; /* Assurez-vous que chaque projet est assez haut pour le défilement */
-  /*faire un margin top négtif pour que le titre du projet soit en haut de la page, mais il faut qu'il s'adapt à la taille de l'écran*/
-  transform: translateY(calc(-1 * (40vh - 10rem)));
+section.projects {
+  min-height: 100vh;
+  padding: clamp(2rem, 6vw, 6rem);
+  margin-top: clamp(4rem, 12vw, 18rem);
+  position: relative;
 }
 img {
   width: 200px;
@@ -260,13 +331,56 @@ h1 {
 }
 
 #titre-projet {
-  font-size: 10rem;
-  margin-bottom: 50px;
-  color : #044894;
+  font-size: clamp(4rem, 12vw, 10rem);
+  margin-bottom: 1.5rem;
+  color: #044894;
   display: block;
-  text-align: center;
-  position: sticky;
-  z-index: 19;
+  text-align: left;
+}
+
+.projects-header {
+  max-width: 960px;
+  margin: 0 auto 4rem auto;
+  text-align: left;
+  position: relative;
+  padding-left: clamp(0rem, 3vw, 2.5rem);
+}
+
+.projects-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  width: clamp(60px, 12vw, 140px);
+  height: clamp(60px, 12vw, 140px);
+  background: radial-gradient(circle at 30% 30%, rgba(89, 166, 254, 0.45), transparent 65%);
+  filter: blur(12px);
+  z-index: -1;
+}
+
+.projects-header::after {
+  content: '';
+  position: absolute;
+  left: clamp(-3rem, -2vw, -1rem);
+  top: 50%;
+  width: clamp(120px, 35vw, 360px);
+  height: 2px;
+  background: linear-gradient(90deg, rgba(89, 166, 254, 0), rgba(89, 166, 254, 0.9), rgba(89, 166, 254, 0));
+  opacity: 0.6;
+}
+
+.projects-intro {
+  color: #9ec5ff;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  line-height: 1.5;
+}
+
+.eyebrow {
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #59a6fe;
+  margin-bottom: 0.5rem;
 }
 
 .burger-menu {
@@ -348,30 +462,113 @@ h1 {
   vertical-align: middle;
 }
 
-.project {
-  font-size: 1.2rem;
-  /* Ajustez la taille de la police */
-  margin: 20px 0;
-  /* Ajoutez de la marge autour de chaque projet */
-  transition: transform 0.3s ease-out;
-  /* Animation fluide */
+.project-card {
+  background: rgba(0, 11, 28, 0.6);
+  border: 1px solid rgba(89, 166, 254, 0.2);
+  border-radius: 32px;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+  backdrop-filter: blur(20px);
+  transition: transform 0.4s ease, border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.listproject{
+.project-card:hover {
+  transform: translateY(-10px);
+  border-color: #59a6fe;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(130deg, rgba(89, 166, 254, 0.18), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.project-card:hover::before {
+  opacity: 1;
+}
+
+.project-cover {
+  border-radius: 24px;
+  width: 100%;
+  height: clamp(240px, 40vw, 420px);
+  object-fit: cover;
+  margin-bottom: 1.5rem;
+}
+
+.project-content h3 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #f3f7ff;
+  margin-bottom: 0.75rem;
+}
+
+.project-content p {
+  color: #c8dcff;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.project-meta {
   display: flex;
-  flex-direction: column;
+  gap: 1rem;
+  color: #7ab0ee;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.project h3 {
-  font-size: 2rem;
-  /* Taille de la police pour le titre du projet */
-  color: #044894;
-  /* Couleur du titre */
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
-.project p {
-  margin-top: 10px;
-  /* Espace entre le titre et la description */
+.tag {
+  padding: 0.35rem 0.85rem;
+  border: 1px solid rgba(147, 199, 255, 0.4);
+  border-radius: 999px;
+  color: #c2dcff;
+  font-size: 0.9rem;
+}
+
+.project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.project-link {
+  font-family: 'Tusker Grotesk', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  border: 1px solid #59a6fe;
+  color: #011a36;
+  background: #59a6fe;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.project-link:hover {
+  background: transparent;
+  color: #59a6fe;
+}
+
+.project-link.secondary {
+  background: transparent;
+  color: #59a6fe;
+}
+
+.project-link.secondary:hover {
+  background: rgba(89, 166, 254, 0.15);
 }
 
 

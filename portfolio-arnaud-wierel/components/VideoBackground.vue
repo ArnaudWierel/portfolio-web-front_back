@@ -8,12 +8,19 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref } from 'vue';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 const videoBg = ref(null);
 const video = ref(null);
+const scrollListener = () => {
+    if (!videoBg.value) return;
+    const progress = Math.min(Math.max(window.scrollY / 600, 0), 1);
+    const opacity = 1 - progress;
+    videoBg.value.style.opacity = opacity.toFixed(2);
+    videoBg.value.style.visibility = opacity <= 0.05 ? 'hidden' : 'visible';
+};
 
 onMounted(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -38,10 +45,12 @@ onMounted(() => {
     );
 
     // Sur le scroll de la page, on réduit l'opacité de la vidéo
-    window.addEventListener('scroll', () => {
-        const newOpacity = 1 - window.scrollY / 740;
-        videoBg.value.style.opacity = newOpacity;
-    });
+    window.addEventListener('scroll', scrollListener, { passive: true });
+    scrollListener();
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', scrollListener);
 });
 </script>
 
