@@ -37,6 +37,14 @@ body {
     padding: 0;
 }
 
+* {
+    font-family: inherit;
+}
+
+p, span, a, li, div, button, input, textarea, select, label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
 .page-enter-active,
 .page-leave-active {
     transition: opacity 0.5s;
@@ -53,6 +61,7 @@ body {
 }
 
 body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
     -ms-overflow-style: none;
     /* IE and Edge */
     scrollbar-width: none;
