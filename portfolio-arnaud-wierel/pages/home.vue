@@ -184,7 +184,7 @@ onMounted(() => {
           avancé pour donner vie à vos concepts.
         </p>
         <div class="hero-cta">
-          <NuxtLink to="/contact" class="btn primary">Commencer un projet</NuxtLink>
+          <NuxtLink to="/contact" class="btn primary">Commencer un projet ensemble</NuxtLink>
           <NuxtLink to="/project" class="btn ghost">Découvrir mes réalisations</NuxtLink>
         </div>
       </section>
