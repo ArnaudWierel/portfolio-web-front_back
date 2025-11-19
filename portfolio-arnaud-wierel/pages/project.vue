@@ -3,10 +3,10 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import type { Project } from '~/assets/data/projects';
-import { projectsData } from '~/assets/data/projects';
 import { useTheme } from '~/composables/useTheme';
 
-const projects = ref<Project[]>(projectsData);
+const { data: projectsResponse, pending, error, refresh } = await useFetch<Project[]>('/api/projects');
+const projects = computed(() => projectsResponse.value ?? []);
 const featuredProject = computed(() => projects.value[0]);
 
 const tags = computed(() => {
@@ -161,7 +161,16 @@ onUnmounted(() => {
         </div>
       </section>
 
-      <section class="projects-grid">
+      <section v-if="pending" class="projects-state">
+        <p>Chargement des projets…</p>
+      </section>
+
+      <section v-else-if="error" class="projects-state">
+        <p>Impossible de récupérer les projets pour le moment.</p>
+        <button class="btn ghost" @click="refresh()">Réessayer</button>
+      </section>
+
+      <section v-else class="projects-grid">
         <article v-for="project in filteredProjects" :key="project.slug" class="project-card">
           <div class="project-cover">
             <img :src="project.cover" :alt="project.title" loading="lazy" />
@@ -458,6 +467,18 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.projects-state {
+  border: 1px solid var(--card-border, rgba(89, 166, 254, 0.3));
+  border-radius: clamp(1rem, 3vw, 2rem);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  background: var(--card-bg, rgba(0, 11, 28, 0.7));
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
 }
 
 .project-card {
