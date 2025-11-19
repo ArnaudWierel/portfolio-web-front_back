@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import type { Project } from '~/assets/data/projects';
 import { projectsData } from '~/assets/data/projects';
+import { useTheme } from '~/composables/useTheme';
 
 const projects = ref<Project[]>(projectsData);
 const highlights = ref([
@@ -24,15 +25,7 @@ const highlights = ref([
   }
 ]);
 
-const isDark = ref(true);
-const applyTheme = () => {
-  document.documentElement.dataset.theme = isDark.value ? 'dark' : 'light';
-};
-
-const toggleTheme = () => {
-  isDark.value = !isDark.value;
-  applyTheme();
-};
+const { isDark, toggleTheme, hydrateTheme } = useTheme();
 
 const initAnimations = () => {
   gsap.registerPlugin(ScrollTrigger);
@@ -144,7 +137,7 @@ const initAnimations = () => {
 };
 
 onMounted(() => {
-  applyTheme();
+  hydrateTheme();
   initAnimations();
 });
 </script>
@@ -157,7 +150,7 @@ onMounted(() => {
         <span class="brand-name">Arnaud Wierel</span>
       </div>
       <nav class="main-nav" aria-label="Navigation principale">
-        <NuxtLink to="/" class="nav-link">Home</NuxtLink>
+        <NuxtLink to="/home" class="nav-link">Home</NuxtLink>
         <NuxtLink to="/about" class="nav-link">About</NuxtLink>
         <NuxtLink to="/project" class="nav-link">Projects</NuxtLink>
         <NuxtLink to="/contact" class="nav-link">Contact</NuxtLink>
@@ -382,7 +375,7 @@ onMounted(() => {
 
 .hero-title {
   font-size: clamp(3rem, 15vw, 10rem);
-  font-family: 'Tusker Grotesk', sans-serif;
+  font-family: 'Bebas Neue', 'Tusker Grotesk', sans-serif;
   line-height: 0.9;
   margin: 0.5rem 0;
   color: #f8fbff;

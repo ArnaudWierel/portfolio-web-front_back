@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 *,
 *::after,
 *::before {
@@ -11,13 +13,48 @@
 	--color-bg: #0b0a0a;
 	--color-link: #aaa;
 	--color-link-hover: #fff;
+
+	--bg-primary: #010b1b;
+	--text-primary: #d9eaff;
+	--text-muted: #9fbff7;
+	--text-muted-strong: #a9c7ff;
+	--text-eyebrow: rgba(217, 234, 255, 0.6);
+	--hero-bg: rgba(1, 11, 27, 0.5);
+	--card-bg: rgba(0, 11, 28, 0.7);
+	--card-bg-strong: rgba(0, 11, 28, 0.8);
+	--card-border: rgba(89, 166, 254, 0.2);
+	--header-bg: rgba(1, 11, 27, 0.85);
+	--stack-bg: #010b1b;
+	--accent: #59a6fe;
+	--accent-on: #011a36;
+	--accent-muted: #7ab0ee;
+	--badge-text: #9ec7ff;
+}
+
+:root[data-theme='light'] {
+	--bg-primary: #f4f6fb;
+	--text-primary: #0c1b32;
+	--text-muted: #53617a;
+	--text-muted-strong: #3f4c63;
+	--text-eyebrow: rgba(12, 27, 50, 0.5);
+	--hero-bg: rgba(255, 255, 255, 0.9);
+	--card-bg: rgba(255, 255, 255, 0.9);
+	--card-bg-strong: rgba(255, 255, 255, 0.97);
+	--card-border: rgba(12, 27, 50, 0.08);
+	--header-bg: rgba(255, 255, 255, 0.9);
+	--stack-bg: #f6f8ff;
+	--accent: #0052cc;
+	--accent-on: #f7fbff;
+	--accent-muted: #1f3f84;
+	--badge-text: #1f3f84;
 }
 
 html {
 	scroll-behavior: initial;
 }
 
-html, body{
+html,
+body {
 	width: 100%;
 	min-height: 100%;
 }
@@ -37,13 +74,13 @@ body {
 }
 
 .oh {
-    position: relative;
-    overflow: hidden
+	position: relative;
+	overflow: hidden
 }
 
 .oh__inner {
-    will-change: transform;
-    display: inline-block;
+	will-change: transform;
+	display: inline-block;
 }
 
 .line {
@@ -84,7 +121,7 @@ body {
 @keyframes loaderAnim {
 	to {
 		opacity: 1;
-		transform: scale3d(0.5,0.5,1);
+		transform: scale3d(0.5, 0.5, 1);
 	}
 }
 
@@ -252,7 +289,7 @@ main {
 	justify-self: center;
 	grid-area: 1 / 1 / -1 / -1;
 	position: relative;
-	transform: translate3d(0,50%,0);
+	transform: translate3d(0, 50%, 0);
 	pointer-events: none;
 }
 
@@ -260,16 +297,16 @@ main {
 	line-height: 1.2;
 	margin: 0;
 	font-weight: normal;
-	font-size: clamp(2rem,10vw,8rem);
+	font-size: clamp(2rem, 10vw, 8rem);
 	font-family: scotch-display, sans-serif;
 	font-weight: 300;
 }
 
-.preview__title-main > span {
+.preview__title-main>span {
 	display: block;
 }
 
-.preview__title-main > span:last-child {
+.preview__title-main>span:last-child {
 	display: block;
 	padding: 0 1rem;
 	transform: translateY(-33%);
@@ -286,16 +323,17 @@ main {
 }
 
 .content-wrap {
-	position: -webkit-sticky; /* Safari */
+	position: -webkit-sticky;
+	/* Safari */
 	position: sticky;
 	top: 0;
 	grid-area: page;
 	height: 100vh;
 	overflow: hidden;
 	display: grid;
-	grid-template-areas: 
-	'back back'
-	'content content';
+	grid-template-areas:
+		'back back'
+		'content content';
 	grid-template-rows: auto 1fr;
 	pointer-events: none;
 	padding: 2rem;
@@ -340,9 +378,9 @@ main {
 	grid-gap: 2vw;
 	grid-template-columns: 100%;
 	grid-template-areas:
-	'img' 
-	'thumbs'
-	'text';
+		'img'
+		'thumbs'
+		'text';
 	grid-template-rows: 20vh min-content auto;
 }
 
@@ -359,14 +397,14 @@ main {
 .content__title {
 	font-family: scotch-display, sans-serif;
 	font-weight: 400;
-	font-size: clamp(3rem,6.5vw,5.5rem);
+	font-size: clamp(3rem, 6.5vw, 5.5rem);
 }
 
 .content__title span {
 	display: block;
 }
 
-.content__title > span:last-child {
+.content__title>span:last-child {
 	transform: translateY(-25%);
 	font-family: scotch-display, sans-serif;
 	font-weight: 500;
@@ -381,10 +419,10 @@ main {
 .content__thumbs {
 	grid-area: thumbs;
 	display: grid;
-    grid-auto-columns: auto;
-    grid-auto-flow: column;
-    grid-gap: 2vw;
-    justify-content: start;
+	grid-auto-columns: auto;
+	grid-auto-flow: column;
+	grid-gap: 2vw;
+	justify-content: start;
 }
 
 .content__thumbs-item {
@@ -406,8 +444,10 @@ main {
 		grid-template-areas: 'frame page';
 		grid-template-columns: auto 1fr;
 	}
+
 	.frame {
-		position: -webkit-sticky; /* Safari */
+		position: -webkit-sticky;
+		/* Safari */
 		position: sticky;
 		top: 0;
 		height: 100vh;
@@ -415,7 +455,7 @@ main {
 		padding: 2rem;
 	}
 
-	.frame__title, 
+	.frame__title,
 	.frame__prev,
 	#cdawrap {
 		justify-self: start;
@@ -433,26 +473,31 @@ main {
 	}
 
 	.frame__title-back {
-		transform: scale3d(1,-1,1);
+		transform: scale3d(1, -1, 1);
 	}
+
 	.preview {
 		min-height: 90vh;
 	}
+
 	.preview__desc {
 		margin: -2.5rem auto 0;
 	}
+
 	.content {
 		grid-template-columns: 60% 1fr;
 		grid-template-areas:
-		'... ...' 
-		'img text'
-		'thumbs text'
-		'... ...';
+			'... ...'
+			'img text'
+			'thumbs text'
+			'... ...';
 		grid-template-rows: 2rem 1fr auto 1rem;
 	}
+
 	.content__thumbs-item {
 		width: 100px;
 	}
+
 	.content__text {
 		max-width: 400px;
 	}
