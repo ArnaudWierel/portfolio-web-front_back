@@ -29,15 +29,7 @@ const highlights = ref([
   }
 ]);
 
-const isDark = ref(true);
-const applyTheme = () => {
-  document.documentElement.dataset.theme = isDark.value ? 'dark' : 'light';
-};
-
-const toggleTheme = () => {
-  isDark.value = !isDark.value;
-  applyTheme();
-};
+const { isDark, toggleTheme } = useTheme();
 
 const initAnimations = () => {
   gsap.registerPlugin(ScrollTrigger);
@@ -48,9 +40,9 @@ const initAnimations = () => {
     .from('.site-header .header-actions', { opacity: 0, y: -20 }, '-=0.5');
 
   gsap.timeline({ defaults: { ease: 'power3.out', duration: 0.9 } })
-    .from('.hero .eyebrow', { opacity: 0, y: 20 })
-    .from('.hero-title', { opacity: 0, y: 40 }, '-=0.4')
-    .from('.hero-lead', { opacity: 0, y: 30 }, '-=0.5')
+    .fromTo('.hero .eyebrow', { opacity: 0, y: 20 }, { opacity: 1, y: 0 })
+    .fromTo('.hero-title', { opacity: 0, y: 40 }, { opacity: 1, y: 0 }, '-=0.4')
+    .fromTo('.hero-lead', { opacity: 0, y: 30 }, { opacity: 1, y: 0 }, '-=0.5')
     .fromTo(
       '.hero-cta .btn',
       { autoAlpha: 0, y: 20 },
@@ -149,7 +141,6 @@ const initAnimations = () => {
 };
 
 onMounted(() => {
-  applyTheme();
   initAnimations();
 });
 </script>
@@ -383,11 +374,12 @@ onMounted(() => {
   letter-spacing: 0.3em;
   font-size: 0.8rem;
   color: var(--text-eyebrow);
+  opacity: 1; /* Assure que l'élément est visible par défaut */
 }
 
 .hero-title {
   font-size: clamp(3rem, 15vw, 10rem);
-  font-family: 'Tusker Grotesk', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   line-height: 0.9;
   margin: 0.5rem 0;
   color: #f8fbff;

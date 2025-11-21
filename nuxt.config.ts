@@ -50,7 +50,15 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      ignore: ['/home'] // Exclude `/home` from prerendering
+      ignore: ['/home', '/project', '/project/**'], // Exclude `/home` and `/project` routes from prerendering
+      crawlLinks: false
+    }
+  },
+
+  // S'assurer que les routes dynamiques sont bien générées
+  router: {
+    options: {
+      strict: false
     }
   },
 
