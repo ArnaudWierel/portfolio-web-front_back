@@ -85,68 +85,101 @@ const initAnimations = () => {
   const projectsSection = document.querySelector('.projects');
   if (stackSection && projectsSection) {
     const cards = stackSection.querySelectorAll('.stack-card');
-    gsap.set(cards, { opacity: 0.2, scale: 0.92 });
-    gsap.set(projectsSection, { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0 });
+    const isMobile = window.innerWidth <= 900;
+    
+    // Sur mobile, animations simplifiées sans pinning
+    if (isMobile) {
+      gsap.set(cards, { opacity: 0 });
+      gsap.set(projectsSection, { opacity: 0 });
+      
+      // Animation simple des cartes au scroll
+      cards.forEach((card, index) => {
+        gsap.to(card, {
+          opacity: 1,
+          duration: 0.6,
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        });
+      });
+      
+      // Animation simple de la section projets
+      gsap.to(projectsSection, {
+        opacity: 1,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: projectsSection,
+          start: 'top 80%',
+          toggleActions: 'play none none none'
+        }
+      });
+    } else {
+      // Sur desktop, animations avec pinning
+      gsap.set(cards, { opacity: 0.2, scale: 0.92 });
+      gsap.set(projectsSection, { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0 });
 
-    const stackTimeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: stackSection,
-        start: 'top 20%',
-        end: () => '+=' + cards.length * 260,
-        scrub: 1.2,
-        pin: true,
-        anticipatePin: 1,
-        pinSpacing: true
-      }
+      const stackTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: stackSection,
+          start: 'top 20%',
+          end: () => '+=' + cards.length * 260,
+          scrub: 1.2,
+          pin: true,
+          anticipatePin: 1,
+          pinSpacing: true
+        }
+      });
+
+      cards.forEach((card, index) => {
+        stackTimeline
+          .to(
+            card,
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 0.6,
+              ease: 'power2.out'
+            },
+            index
+          )
+          .to(
+            card,
+            {
+              opacity: 0.15,
+              scale: 0.9,
+              duration: 0.6,
+              ease: 'power2.in'
+            },
+            index + 0.6
+      );
     });
 
-    cards.forEach((card, index) => {
       stackTimeline
         .to(
-          card,
+          stackSection,
           {
-            opacity: 1,
-            scale: 1,
-            duration: 0.6,
-            ease: 'power2.out'
+            opacity: 0.3,
+            scale: 0.85,
+            yPercent: -10,
+            filter: 'blur(6px)',
+            duration: 0.8,
+            ease: 'power2.inOut'
           },
-          index
+          cards.length - 0.3
         )
         .to(
-          card,
+          projectsSection,
           {
-            opacity: 0.15,
-            scale: 0.9,
-            duration: 0.6,
-            ease: 'power2.in'
+            clipPath: 'inset(0% 0% 0% 0%)',
+            opacity: 1,
+            duration: 0.9,
+            ease: 'power2.out'
           },
-          index + 0.6
-    );
-  });
-
-    stackTimeline
-      .to(
-        stackSection,
-        {
-          opacity: 0.3,
-          scale: 0.85,
-          yPercent: -10,
-          filter: 'blur(6px)',
-          duration: 0.8,
-          ease: 'power2.inOut'
-        },
-        cards.length - 0.3
-      )
-      .to(
-        projectsSection,
-        {
-          clipPath: 'inset(0% 0% 0% 0%)',
-          opacity: 1,
-          duration: 0.9,
-          ease: 'power2.out'
-        },
-        cards.length - 0.4
-      );
+          cards.length - 0.4
+        );
+    }
   }
 };
 
