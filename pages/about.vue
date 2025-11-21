@@ -34,6 +34,12 @@ const experiences = [
     description: 'Support technique Europe pour des marques audio haut de gamme (Denon, Marantz, Bowers & Wilkins) : diagnostic de pannes, gestion de tickets et communication client en français et en anglais.'
   },
   {
+    year: '2024',
+    title: 'Consultant digitalisation (stagiaire)',
+    company: 'Versusmind (ESN) · Strasbourg',
+    description: "Accompagnement à la digitalisation d'une association : analyse des besoins, cartographie des processus, conduite du changement et mise en place d'outils collaboratifs simples à prendre en main."
+  },
+  {
     year: '2023',
     title: 'Développeur web / Technicien IT',
     company: 'SIEHR · Strasbourg',
@@ -169,7 +175,7 @@ onMounted(() => {
               Mon expertise s'articule aujourd'hui autour de WordPress (Elementor, JetEngine) et de technologies modernes comme Nuxt 3 ou Vue 3. Je construis des sites rapides, élégants et faciles à administrer, pensés pour durer dans le temps et rester simples à gérer au quotidien.
             </p>
             <p>
-              En parallèle de mon activité, je suis élève-ingénieur en informatique au CESI Strasbourg, avec une spécialisation en cybersécurité et systèmes/réseaux. J'ai également travaillé comme développeur web, technicien IT, consultant digitalisation et technicien support pour des marques audio premium. Cette expérience terrain me permet d'aborder chaque projet web avec rigueur, méthode et une vraie exigence de qualité.
+              En parallèle de mon activité, je suis élève-ingénieur en informatique au CESI Strasbourg, avec une spécialisation en cybersécurité et systèmes/réseaux. J'ai également travaillé en ESN et chez l'annonceur comme développeur web, technicien IT, consultant en digitalisation (Versusmind) et technicien support pour des marques audio premium. Cette expérience terrain me permet d'aborder chaque projet web avec rigueur, méthode et une vraie exigence de qualité.
             </p>
           </div>
         </div>
