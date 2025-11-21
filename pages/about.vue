@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, nextTick } from 'vue';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
@@ -10,30 +10,30 @@ definePageMeta({
 const { isDark, toggleTheme } = useTheme();
 
 const skills = [
-  { category: 'Frontend', items: ['Vue.js', 'Nuxt.js', 'React', 'TypeScript', 'JavaScript'] },
-  { category: 'Animation', items: ['GSAP', 'Three.js', 'WebGL', 'Motion Design'] },
-  { category: 'Backend', items: ['Node.js', 'PHP', 'Supabase', 'PostgreSQL'] },
-  { category: 'Tools', items: ['Git', 'Figma', 'Vite', 'Webpack'] }
+  { category: 'Web & intégration', items: ['WordPress', 'Elementor', 'JetEngine', 'Nuxt 3', 'Vue 3', 'HTML / CSS', 'JavaScript / TypeScript'] },
+  { category: 'Animation', items: ['GSAP', 'Micro-interactions', 'Animations au scroll', 'Design responsive'] },
+  { category: 'Backend & données', items: ['Node.js', 'PHP (WordPress)', 'Supabase', 'PostgreSQL'] },
+  { category: 'Outils & workflow', items: ['Git', 'Figma', 'OVH', 'Cloudflare', 'Vite', 'Notion'] }
 ];
 
 const experiences = [
   {
-    year: '2024',
-    title: 'Développeur Frontend',
-    company: 'Freelance',
-    description: 'Création d\'expériences web immersives pour des studios et marques premium.'
+    year: 'Depuis 2021',
+    title: 'Créateur de sites web',
+    company: 'Auto-entrepreneur · Strasbourg',
+    description: 'Création de sites vitrines, pages de présentation et petites plateformes sur-mesure pour indépendants, associations et entreprises locales. WordPress, Elementor, JetEngine, Nuxt 3.'
+  },
+  {
+    year: '2024–2025',
+    title: 'Technicien Support – Division audio premium',
+    company: 'CPM International · Bratislava',
+    description: 'Support technique Europe pour des marques audio haut de gamme (Denon, Marantz, Bowers & Wilkins) : diagnostic de pannes, gestion de tickets et communication client en français et en anglais.'
   },
   {
     year: '2023',
-    title: 'Développeur Full Stack',
-    company: 'Agence Digitale',
-    description: 'Développement d\'applications web modernes avec Vue.js et Nuxt.js.'
-  },
-  {
-    year: '2022',
-    title: 'Développeur Frontend',
-    company: 'Startup Tech',
-    description: 'Intégration d\'interfaces utilisateur et développement de composants réutilisables.'
+    title: 'Développeur web / Technicien IT',
+    company: 'SIEHR · Strasbourg',
+    description: 'Développement de sites WordPress et de plugins PHP/SQL, support utilisateurs et maintenance du parc informatique.'
   }
 ];
 
@@ -50,37 +50,68 @@ const initAnimations = () => {
     .fromTo('.page-header h1', { opacity: 0, y: 40 }, { opacity: 1, y: 0 }, '-=0.4')
     .fromTo('.page-header p', { opacity: 0, y: 30 }, { opacity: 1, y: 0 }, '-=0.5');
 
-  gsap.from('.about-section', {
-    opacity: 0,
-    y: 40,
-    duration: 0.8,
-    stagger: 0.2,
-    scrollTrigger: {
-      trigger: '.about-section',
-      start: 'top 80%'
-    }
+  gsap.utils.toArray('.about-section').forEach((section: any) => {
+    gsap.fromTo(section,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
   });
 
-  gsap.from('.skill-card', {
-    opacity: 0,
-    y: 30,
-    duration: 0.6,
-    stagger: 0.1,
-    scrollTrigger: {
-      trigger: '.skills-grid',
-      start: 'top 80%'
-    }
+  gsap.utils.toArray('.section-header').forEach((header: any) => {
+    gsap.fromTo(header,
+      { opacity: 0, y: 20 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        scrollTrigger: {
+          trigger: header,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
   });
 
-  gsap.from('.experience-item', {
-    opacity: 0,
-    x: -30,
-    duration: 0.6,
-    stagger: 0.15,
-    scrollTrigger: {
-      trigger: '.experiences-list',
-      start: 'top 80%'
-    }
+  gsap.utils.toArray('.skill-card').forEach((card: any) => {
+    gsap.fromTo(card, 
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+  });
+
+  gsap.utils.toArray('.experience-item').forEach((item: any) => {
+    gsap.fromTo(item,
+      { opacity: 0, x: -30 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.6,
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
   });
 };
 
@@ -117,9 +148,9 @@ onMounted(() => {
     <main class="page">
       <div class="page-header">
         <p class="eyebrow">à propos</p>
-        <h1>Un développeur passionné par l'esthétique et la performance</h1>
+        <h1>Créateur de sites web modernes pour votre activité</h1>
         <p class="page-description">
-          Je crois aux expériences web raffinées, où motion design, narration et engineering travaillent ensemble pour raconter une histoire mémorable.
+          Je conçois des sites web clairs, modernes et efficaces, pensés pour mettre en valeur votre activité et donner une image professionnelle en ligne.
         </p>
       </div>
 
@@ -128,16 +159,13 @@ onMounted(() => {
           <h2>Mon parcours</h2>
           <div class="text-content">
             <p>
-              Passionné par le web depuis mes premières lignes de code, j'ai développé une approche unique qui allie rigueur technique et sens esthétique. 
-              Chaque projet est l'occasion de créer quelque chose d'exceptionnel, où chaque détail compte.
+              Passionné par le web, je crée des sites depuis 2021 en tant que freelance et auto-entrepreneur. J'ai commencé par des projets pour mon entourage, puis pour des indépendants, associations et petites entreprises. Chaque projet est pour moi l'occasion de comprendre un métier, une histoire et de la traduire en interface claire et professionnelle.
             </p>
             <p>
-              Spécialisé dans le développement frontend moderne, je maîtrise les frameworks JavaScript les plus performants et les techniques d'animation 
-              les plus avancées. Mon objectif : transformer vos idées en expériences numériques immersives et mémorables.
+              Mon expertise s'articule aujourd'hui autour de WordPress (Elementor, JetEngine) et de technologies modernes comme Nuxt 3 ou Vue 3. Je construis des sites rapides, élégants et faciles à administrer, pensés pour durer dans le temps et rester simples à gérer au quotidien.
             </p>
             <p>
-              Que ce soit pour une landing page premium, une application web complexe ou un site e-commerce, j'accompagne mes clients de l'idéation 
-              jusqu'au déploiement, en garantissant qualité, performance et attention aux détails.
+              En parallèle de mon activité, je suis élève-ingénieur en informatique au CESI Strasbourg, avec une spécialisation en cybersécurité et systèmes/réseaux. J'ai également travaillé comme développeur web, technicien IT, consultant digitalisation et technicien support pour des marques audio premium. Cette expérience terrain me permet d'aborder chaque projet web avec rigueur, méthode et une vraie exigence de qualité.
             </p>
           </div>
         </div>
@@ -178,7 +206,7 @@ onMounted(() => {
       <section class="about-section cta-section">
         <div class="cta-content">
           <h2>Travaillons ensemble</h2>
-          <p>Vous avez un projet en tête ? Discutons de la meilleure façon de le concrétiser.</p>
+          <p>Vous avez besoin d'un site web professionnel ou d'une refonte ? Discutons de la meilleure façon de le concevoir, de le développer et de le mettre en ligne.</p>
           <NuxtLink to="/contact" class="btn primary">
             Me contacter
             <Icon name="ph:arrow-right" size="20" />
@@ -329,6 +357,7 @@ onMounted(() => {
 
 .section-header {
   margin-bottom: 1rem;
+  opacity: 0;
 }
 
 .section-header h2 {
@@ -370,6 +399,7 @@ onMounted(() => {
   border-radius: 20px;
   padding: 2rem;
   transition: all 0.3s ease;
+  opacity: 0;
 }
 
 .skill-card:hover {
@@ -415,6 +445,7 @@ onMounted(() => {
   border: 1px solid var(--card-border);
   border-radius: 20px;
   transition: all 0.3s ease;
+  opacity: 0;
 }
 
 .experience-item:hover {

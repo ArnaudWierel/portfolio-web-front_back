@@ -122,8 +122,7 @@ onMounted(async () => {
         <p class="eyebrow">portfolio</p>
         <h1>Mes réalisations</h1>
         <p class="page-description">
-          Sélection de projets qui illustrent mon approche entre storytelling, motion design et rigueur technique. 
-          Chaque projet représente une collaboration unique où l'innovation rencontre l'excellence.
+          Sélection de sites web réalisés pour des entrepreneurs, associations et petites entreprises. Chaque projet est conçu sur-mesure pour mettre en valeur l'activité du client, avec un design soigné, une navigation claire et une base technique solide.
         </p>
       </div>
 

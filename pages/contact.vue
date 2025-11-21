@@ -22,11 +22,10 @@ const submitted = ref(false);
 const error = ref<string | null>(null);
 
 const projectTypes = [
-  'Site web',
+  'Site vitrine',
+  'Refonte de site',
+  'Boutique en ligne',
   'Application web',
-  'Landing page',
-  'Motion design',
-  'Design system',
   'Autre'
 ];
 
@@ -164,10 +163,10 @@ onMounted(() => {
 
     <main class="page">
       <div class="page-header">
-        <p class="eyebrow">discutons</p>
-        <h1>Prêt à imaginer votre prochain projet ?</h1>
+        <p class="eyebrow">contact</p>
+        <h1>Parlons de votre site web</h1>
         <p class="page-description">
-          J'accompagne studios et marques sur des expériences premium. Nous pouvons parler d'un projet en cours ou d'une idée.
+          Vous avez besoin d'un site vitrine, d'une refonte ou d'un accompagnement technique ? Dites-m'en un peu plus sur votre projet et je vous réponds rapidement.
         </p>
       </div>
 
@@ -176,17 +175,20 @@ onMounted(() => {
           <div class="info-card">
             <Icon name="ph:envelope" size="24" />
             <h3>Email</h3>
-            <a href="mailto:contact@arnaudwierel.com">contact@arnaudwierel.com</a>
+            <p>Le moyen le plus simple pour me joindre.</p>
+            <a href="mailto:contact@arnaudwierel.com">a.wierel@arnaudwiereldev.fr</a>
           </div>
           <div class="info-card">
             <Icon name="ph:linkedin-logo" size="24" />
             <h3>LinkedIn</h3>
-            <a href="https://linkedin.com/in/arnaudwierel" target="_blank" rel="noopener noreferrer">linkedin.com/in/arnaudwierel</a>
+            <p>Pour un premier contact ou en savoir plus sur mon profil.</p>
+            <a href="https://www.linkedin.com/in/arnaud-wierel-49149a239/" target="_blank" rel="noopener noreferrer">linkedin.com/in/arnaudwierel</a>
           </div>
           <div class="info-card">
             <Icon name="ph:github-logo" size="24" />
             <h3>GitHub</h3>
-            <a href="https://github.com/arnaudwierel" target="_blank" rel="noopener noreferrer">github.com/arnaudwierel</a>
+            <p>Pour voir certains de mes projets techniques.</p>
+            <a href="https://github.com/ArnaudWierel" target="_blank" rel="noopener noreferrer">github.com/arnaudwierel</a>
           </div>
         </div>
 
@@ -209,7 +211,7 @@ onMounted(() => {
                 v-model="form.name"
                 type="text"
                 required
-                placeholder="Votre nom"
+                placeholder="Nom et prénom"
               />
             </div>
             <div class="form-group">
@@ -219,23 +221,23 @@ onMounted(() => {
                 v-model="form.email"
                 type="email"
                 required
-                placeholder="votre@email.com"
+                placeholder="vous@exemple.fr"
               />
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="company">Entreprise / Studio</label>
+              <label for="company">Entreprise (optionnel)</label>
               <input
                 id="company"
                 v-model="form.company"
                 type="text"
-                placeholder="Nom de votre entreprise"
+                placeholder="Nom de votre activité ou structure"
               />
             </div>
             <div class="form-group">
-              <label for="projectType">Type de projet</label>
+              <label for="projectType">Type de projet (optionnel)</label>
               <select id="projectType" v-model="form.projectType">
                 <option value="">Sélectionnez un type</option>
                 <option v-for="type in projectTypes" :key="type" :value="type">{{ type }}</option>
@@ -250,7 +252,7 @@ onMounted(() => {
               v-model="form.message"
               required
               rows="6"
-              placeholder="Parlez-moi de votre projet..."
+              placeholder="Parlez-moi brièvement de votre projet, de vos objectifs et de votre contexte (activité, public cible, etc.)."
             ></textarea>
           </div>
 
@@ -433,6 +435,13 @@ onMounted(() => {
   font-size: 1.1rem;
   margin: 0 0 0.5rem 0;
   color: var(--text-primary);
+}
+
+.info-card p {
+  font-size: 0.9rem;
+  color: var(--text-muted-strong);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.5;
 }
 
 .info-card a {

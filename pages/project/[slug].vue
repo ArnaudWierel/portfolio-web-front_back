@@ -31,36 +31,92 @@ const error = ref<string | null>(null);
 // Données enrichies pour le projet (pourraient venir de Supabase plus tard)
 const projectDetails = computed(() => {
   if (!project.value) return null;
-  
-  // Générer des détails basés sur les tags et la description
-  const techStack = project.value.tags.filter(tag => 
-    ['Nuxt', 'Vue', 'React', 'TypeScript', 'GSAP', 'Three.js', 'WebGL', 'PHP', 'JavaScript'].some(tech => 
-      tag.toLowerCase().includes(tech.toLowerCase())
+
+  const tags = project.value.tags.map(tag => tag.toLowerCase());
+  const techStack = project.value.tags.filter(tag =>
+    ['nuxt', 'vue', 'react', 'typescript', 'gsap', 'three.js', 'webgl', 'php', 'javascript', 'wordpress', 'elementor', 'jetengine'].some(tech =>
+      tag.toLowerCase().includes(tech)
     )
   );
-  
-  const otherTags = project.value.tags.filter(tag => 
-    !techStack.includes(tag)
-  );
+
+  const isSiteVitrine = tags.includes('site vitrine') || tags.includes('entreprise');
+  const isApplicationInterne =
+    tags.includes('application interne') ||
+    tags.includes('configurateur') ||
+    tags.includes('industriel');
+
+  const context = project.value.description.trim();
+
+  let challenge: string;
+  let solution: string;
+  let features: string[];
+  let results: string[];
+
+  if (isSiteVitrine) {
+    challenge =
+      "Le principal défi était de transformer l'activité du client en une présence en ligne claire et rassurante, avec un site vitrine moderne, lisible et adapté aux usages mobiles. Il fallait structurer l'information pour que les visiteurs comprennent rapidement les services proposés et puissent entrer en contact facilement.";
+    solution =
+      "J'ai conçu un site vitrine sur mesure, centré sur les services, les réalisations et les points forts de l'entreprise. Le design met en avant les projets réalisés, la structure des pages facilite la navigation et le site est entièrement responsive pour une consultation fluide sur mobile, tablette et ordinateur.";
+    features = [
+      "Mise en avant des services et domaines d'expertise",
+      "Galerie de réalisations structurée et facile à parcourir",
+      "Formulaire de contact simple et accessible",
+      "Design moderne aligné avec l'image de l'entreprise",
+      "Site entièrement responsive (mobile, tablette, desktop)",
+      "Structure de contenu pensée pour le référencement local",
+      "Intégration du nom de domaine et certificat HTTPS"
+    ];
+    results = [
+      "Image en ligne plus professionnelle et cohérente avec l'activité",
+      "Visiteurs mieux informés sur les services et les réalisations",
+      "Parcours plus fluide vers la prise de contact",
+      "Site prêt à évoluer au rythme de l'activité du client"
+    ];
+  } else if (isApplicationInterne) {
+    challenge =
+      "Le principal défi consistait à proposer un outil simple à utiliser malgré des règles métiers complexes, tout en garantissant fiabilité, stabilité et clarté des informations dans un contexte professionnel et industriel.";
+    solution =
+      "J'ai développé une application orientée usage, avec une interface claire, des étapes guidées et une logique de configuration structurée. L'outil permet de saisir les critères importants, de générer automatiquement un récapitulatif structuré et de faciliter la transmission des demandes ou des exports.";
+    features = [
+      "Interface de configuration guidée étape par étape",
+      "Récapitulatif structuré des choix et informations saisies",
+      "Export ou transmission des données en fin de parcours",
+      "Ergonomie pensée pour un usage régulier en contexte professionnel",
+      "Gestion des règles métiers sans complexité côté utilisateur",
+      "Base technique fiable et maintenable dans le temps"
+    ];
+    results = [
+      "Processus de saisie et de configuration mieux cadré",
+      "Moins de risques d'erreur dans les demandes transmises",
+      "Gain de temps pour les équipes qui utilisent l'outil",
+      "Outil plus agréable à utiliser au quotidien pour les utilisateurs métiers"
+    ];
+  } else {
+    challenge =
+      "Le défi principal était de concevoir une solution digitale qui soit à la fois claire pour l'utilisateur final et alignée avec les objectifs du client, sans surcharger l'interface ni complexifier l'expérience.";
+    solution =
+      "J'ai mis en place une interface structurée, avec une hiérarchie de contenu lisible, des parcours simples et une base technique fiable. L'accent a été mis sur la clarté, la performance et la capacité du projet à évoluer dans le temps.";
+    features = [
+      "Structure de contenu claire et hiérarchisée",
+      "Interface adaptée aux besoins concrets des utilisateurs",
+      "Responsive design pour tous les supports",
+      "Performance et stabilité de la solution",
+      "Base technique prête pour des évolutions futures"
+    ];
+    results = [
+      "Expérience utilisateur plus fluide et cohérente",
+      "Objectifs du client mieux servis par le produit final",
+      "Solution solide sur laquelle bâtir de futures évolutions"
+    ];
+  }
 
   return {
-    context: `Ce projet a été réalisé en ${project.value.year} dans le cadre de ${project.value.role.toLowerCase()}. ${project.value.description}`,
-    challenge: `Le défi principal était de créer une expérience utilisateur exceptionnelle tout en respectant les contraintes techniques et les délais. L'objectif était de ${project.value.description.split('.')[0].toLowerCase()}.`,
-    solution: `J'ai développé une solution ${techStack.length > 0 ? 'utilisant ' + techStack.join(', ') : 'sur mesure'} qui répond aux besoins spécifiques du projet. L'approche a été axée sur la performance, l'accessibilité et l'expérience utilisateur.`,
+    context,
+    challenge,
+    solution,
     technologies: techStack.length > 0 ? techStack : project.value.tags,
-    features: otherTags.length > 0 ? otherTags : ['Interface moderne', 'Performance optimisée', 'Design responsive'],
-    timeline: [
-      { phase: 'Découverte', duration: '2 semaines', description: 'Analyse des besoins et définition des objectifs' },
-      { phase: 'Conception', duration: '3 semaines', description: 'Design et architecture de la solution' },
-      { phase: 'Développement', duration: '6 semaines', description: 'Implémentation et intégration' },
-      { phase: 'Tests & Déploiement', duration: '2 semaines', description: 'Validation et mise en production' }
-    ],
-    results: [
-      'Interface utilisateur intuitive et moderne',
-      'Performance optimisée pour une expérience fluide',
-      'Code maintenable et scalable',
-      'Documentation complète du projet'
-    ]
+    features,
+    results
   };
 });
 
@@ -97,21 +153,6 @@ const initAnimations = () => {
         trigger: section,
         start: 'top 80%',
         toggleActions: 'play none none reverse'
-      }
-    });
-  });
-
-  // Animation pour la timeline
-  const timelineItems = document.querySelectorAll('.timeline-item');
-  timelineItems.forEach((item, index) => {
-    gsap.from(item, {
-      opacity: 0,
-      x: -30,
-      duration: 0.6,
-      delay: index * 0.1,
-      scrollTrigger: {
-        trigger: item,
-        start: 'top 85%'
       }
     });
   });
@@ -349,32 +390,6 @@ watch(() => route.params.slug, () => {
             >
               <Icon name="ph:check" size="20" />
               <span>{{ feature }}</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- Timeline -->
-        <section class="content-section">
-          <div class="section-header">
-            <h2>Processus de développement</h2>
-            <div class="section-divider"></div>
-          </div>
-          <div class="timeline">
-            <div 
-              v-for="(item, index) in projectDetails.timeline" 
-              :key="index" 
-              class="timeline-item"
-            >
-              <div class="timeline-marker">
-                <span class="timeline-number">{{ index + 1 }}</span>
-              </div>
-              <div class="timeline-content">
-                <div class="timeline-header">
-                  <h4>{{ item.phase }}</h4>
-                  <span class="timeline-duration">{{ item.duration }}</span>
-                </div>
-                <p>{{ item.description }}</p>
-              </div>
             </div>
           </div>
         </section>
@@ -784,76 +799,6 @@ watch(() => route.params.slug, () => {
   flex-shrink: 0;
 }
 
-/* Timeline */
-.timeline {
-  position: relative;
-  padding-left: 2rem;
-  border-left: 2px solid var(--card-border);
-}
-
-.timeline-item {
-  position: relative;
-  margin-bottom: 3rem;
-  padding-left: 2rem;
-}
-
-.timeline-marker {
-  position: absolute;
-  left: -2.5rem;
-  top: 0;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 4px solid var(--bg-primary);
-}
-
-.timeline-number {
-  color: var(--accent-on);
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.timeline-content {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 2rem;
-}
-
-.timeline-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.timeline-header h4 {
-  font-size: 1.5rem;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.timeline-duration {
-  padding: 0.4rem 1rem;
-  background: rgba(89, 166, 254, 0.15);
-  border-radius: 999px;
-  font-size: 0.85rem;
-  color: var(--accent);
-  font-weight: 500;
-}
-
-.timeline-content p {
-  color: var(--text-muted-strong);
-  line-height: 1.7;
-  margin: 0;
-}
-
 /* Results Grid */
 .results-grid {
   display: grid;
@@ -1085,20 +1030,6 @@ watch(() => route.params.slug, () => {
 
   .two-columns {
     grid-template-columns: 1fr;
-  }
-
-  .timeline {
-    padding-left: 1.5rem;
-  }
-
-  .timeline-item {
-    padding-left: 1.5rem;
-  }
-
-  .timeline-marker {
-    left: -2rem;
-    width: 2.5rem;
-    height: 2.5rem;
   }
 
   .cta-section {
