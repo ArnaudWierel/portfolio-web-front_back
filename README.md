@@ -73,3 +73,19 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Configuration Supabase
+
+Ce projet utilise Supabase pour gérer les projets dynamiquement. Pour configurer Supabase :
+
+1. Créez un fichier `.env` à la racine du projet
+2. Ajoutez vos clés Supabase :
+
+```env
+SUPABASE_URL=https://votre-projet.supabase.co
+SUPABASE_ANON_KEY=votre-clé-anon-publique
+```
+
+Vous pouvez trouver ces valeurs dans votre dashboard Supabase : https://app.supabase.com/project/[votre-projet]/settings/api
+
+**Note :** Si Supabase n'est pas configuré, l'application utilisera automatiquement les données statiques en fallback.

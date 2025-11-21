@@ -3,9 +3,14 @@ import { onMounted, ref } from 'vue';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import type { Project } from '~/assets/data/projects';
-import { projectsData } from '~/assets/data/projects';
 
-const projects = ref<Project[]>(projectsData);
+const projects = ref<Project[]>([]);
+
+// Charger les projets depuis Supabase
+onMounted(async () => {
+  const projectsData = await useProjects();
+  projects.value = projectsData;
+});
 const highlights = ref([
   {
     title: 'Expériences immersives',
