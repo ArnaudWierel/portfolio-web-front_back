@@ -13,20 +13,26 @@ onMounted(async () => {
 });
 const highlights = ref([
   {
-    title: 'Expériences immersives',
-    description: 'Concept, motion design et micro-interactions pour des landing pages premium.',
+    title: 'Design moderne & animations fluides',
+    description: 'Création de sites élégants avec animations maîtrisées, micro-interactions et transitions fluides pour une expérience de navigation agréable.',
     badge: 'Motion / GSAP'
   },
   {
-    title: 'Stack moderne',
-    description: 'Nuxt 3, Vue 3, TypeScript, SSR/SSG optimisé pour la performance et le SEO.',
+    title: 'Sites rapides & performants',
+    description: 'Développement sur-mesure avec des technologies modernes pour garantir vitesse, stabilité et un référencement naturel optimisé.',
     badge: 'Front & Back'
   },
   {
     title: 'Accompagnement complet',
-    description: 'De l’idéation au déploiement : design system, intégration, CI/CD.',
+    description: "De l'idée au site en ligne : conseil, design, développement, mise en ligne, SEO de base et formation pour gérer votre site en autonomie.",
     badge: 'End-to-end'
   }
+]);
+
+const timelineMilestones = ref([
+  '2021 — Début de l\'activité · Création de premiers sites vitrines',
+  '2023 — Collaborations avec créateurs & petites entreprises',
+  '2025 — Studio indépendant · Ouvert aux nouveaux projets'
 ]);
 
 const { isDark, toggleTheme } = useTheme();
@@ -176,8 +182,7 @@ onMounted(() => {
         <p class="eyebrow">creative developer</p>
         <h1 class="hero-title">Arnaud Wierel</h1>
         <p class="hero-lead">
-          J’imagine et réalise des interfaces immersives, élégantes et performantes. Motion design, story telling et engineering
-          avancé pour donner vie à vos concepts.
+          Je crée des sites web professionnels, modernes et performants. Design soigné, animations élégantes et développement propre pour donner une vraie identité à votre entreprise.
         </p>
         <div class="hero-cta">
           <NuxtLink to="/contact" class="btn primary">Commencer un projet ensemble</NuxtLink>
@@ -191,13 +196,12 @@ onMounted(() => {
         </div>
         <div class="about-content">
           <p class="eyebrow">à propos</p>
-          <h2>Un développeur passionné par l’esthétique et la perf</h2>
+          <h2>Créateur de sites web dédiés aux entreprises</h2>
           <p>
-            Je crois aux expériences web raffinées, où motion design, narration et engineering travaillent ensemble pour raconter
-            quelque chose de mémorable. J’accompagne les studios, agences et marques sur des projets haut de gamme.
+            Je crée des sites web sur-mesure pour donner une présence en ligne claire, moderne et professionnelle. Mon approche combine design, optimisation et animations maîtrisées pour offrir un site agréable, efficace et simple à gérer. J'accompagne entrepreneurs, artisans, associations et petites entreprises pour valoriser leur activité en ligne.
           </p>
           <div class="about-timeline">
-            <div class="about-timeline__item" v-for="milestone in ['2021 — Freelance', '2023 — Studio Neo', '2025 — Open to Work']" :key="milestone">
+            <div class="about-timeline__item" v-for="milestone in timelineMilestones" :key="milestone">
               {{ milestone }}
             </div>
       </div>
@@ -223,19 +227,19 @@ onMounted(() => {
 
       <section class="stack">
         <p class="eyebrow">stack & outils</p>
-        <h2 class="stack-title">Technos que j’utilise au quotidien</h2>
+        <h2 class="stack-title">Technologies utilisées pour créer vos sites web</h2>
         <div class="stack-grid">
           <article class="stack-card">
-            <h3>Core Front</h3>
-            <p>Nuxt 3 · Vue 3 · TypeScript · Vite · Nuxt UI.</p>
+            <h3>Web & Design</h3>
+            <p>WordPress · Elementor · JetEngine · Nuxt 3 · HTML/CSS · Tailwind · Figma.</p>
           </article>
           <article class="stack-card">
-            <h3>Motion</h3>
-            <p>GSAP · Lenis · SplitType · Three basics · WebGL shaders.</p>
+            <h3>Animations & UX</h3>
+            <p>GSAP · micro-interactions · transitions fluides · design responsive.</p>
           </article>
           <article class="stack-card">
-            <h3>Backend & Ops</h3>
-            <p>Nitro · Node · Supabase · GitHub Actions · Cloudflare Pages.</p>
+            <h3>Gestion & optimisation</h3>
+            <p>SEO de base · optimisation des performances · Cloudflare Pages · OVH · bonnes pratiques techniques.</p>
           </article>
         </div>
       </section>
