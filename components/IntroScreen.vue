@@ -159,6 +159,7 @@ onMounted(() => {
   width: 100vw;
   height: 100vh;
   font-family: 'Tusker Grotesk', sans-serif;
+  background-color: #E6F2FF;
 }
 
 .circular-text-container svg {
