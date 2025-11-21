@@ -389,7 +389,7 @@ onMounted(() => {
 
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
   gap: 1.5rem;
 }
 
@@ -548,6 +548,14 @@ onMounted(() => {
     gap: 1rem;
   }
 
+  .about {
+    grid-template-columns: 1fr;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
   .experience-item {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -559,6 +567,24 @@ onMounted(() => {
 
   .cta-section {
     padding: 3rem 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-card {
+    padding: 1.5rem;
+  }
+
+  .experience-item {
+    padding: 1.5rem;
+  }
+
+  .cta-section {
+    padding: 2rem 1.5rem;
   }
 }
 </style>

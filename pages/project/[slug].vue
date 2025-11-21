@@ -750,7 +750,7 @@ watch(() => route.params.slug, () => {
 /* Technologies Grid */
 .technologies-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
   gap: 1.5rem;
 }
 
@@ -779,7 +779,7 @@ watch(() => route.params.slug, () => {
 /* Features Grid */
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
   gap: 1.5rem;
 }
 
@@ -802,7 +802,7 @@ watch(() => route.params.slug, () => {
 /* Results Grid */
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 1.5rem;
 }
 
@@ -837,7 +837,7 @@ watch(() => route.params.slug, () => {
 /* Related Projects */
 .related-projects {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   gap: 2rem;
 }
 
@@ -1032,8 +1032,78 @@ watch(() => route.params.slug, () => {
     grid-template-columns: 1fr;
   }
 
+  .column {
+    padding: 2rem;
+  }
+
+  .technologies-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .results-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .related-projects {
+    grid-template-columns: 1fr;
+  }
+
+  .project-cover {
+    max-height: 500px;
+  }
+
   .cta-section {
     padding: 3rem 2rem;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+  }
+
+  .cta-buttons .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .project-hero h1 {
+    font-size: clamp(2rem, 10vw, 3.5rem);
+  }
+
+  .project-cover {
+    max-height: 350px;
+    margin-top: 2rem;
+  }
+
+  .column {
+    padding: 1.5rem;
+  }
+
+  .technologies-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tech-item,
+  .feature-item,
+  .result-item {
+    padding: 1.25rem;
+  }
+
+  .cta-section {
+    padding: 2rem 1.5rem;
   }
 }
 </style>

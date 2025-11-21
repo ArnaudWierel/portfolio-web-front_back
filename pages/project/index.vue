@@ -411,7 +411,7 @@ onMounted(async () => {
 /* Stats Section */
 .stats-section {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -558,7 +558,7 @@ onMounted(async () => {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
   gap: clamp(2rem, 4vw, 3rem);
 }
 
@@ -800,10 +800,74 @@ onMounted(async () => {
 
   .projects-grid {
     grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 4vw, 2rem);
   }
 
   .stats-section {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1.5rem;
+  }
+
+  .filters-section {
+    padding: 1.5rem;
+  }
+
+  .filters-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .filters-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .project-content {
+    padding: 1.5rem;
+  }
+
+  .project-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .project-actions {
+    flex-direction: column;
+  }
+
+  .project-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .stats-section {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 1.25rem;
+  }
+
+  .filters-section {
+    padding: 1.25rem;
+  }
+
+  .project-cover {
+    height: 220px;
+  }
+
+  .project-content {
+    padding: 1.25rem;
+  }
+
+  .project-meta {
+    flex-direction: column;
+    gap: 0.75rem;
   }
 }
 </style>

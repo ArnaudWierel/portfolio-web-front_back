@@ -590,6 +590,30 @@ onMounted(() => {
   .form-row {
     grid-template-columns: 1fr;
   }
+
+  .info-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-content {
+    gap: 2rem;
+  }
+
+  .contact-form {
+    padding: 2rem 1.5rem;
+  }
+
+  .info-card {
+    padding: 1.25rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.75rem 1rem;
+  }
 }
 </style>
 
