@@ -4,6 +4,10 @@ import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import type { Project } from '~/assets/data/projects';
 
+useHead({
+  title: 'Portfolio - Mes réalisations'
+});
+
 const { isDark, toggleTheme } = useTheme();
 
 const projects = ref<Project[]>([]);

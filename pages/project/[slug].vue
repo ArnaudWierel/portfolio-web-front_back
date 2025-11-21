@@ -28,6 +28,19 @@ const allProjects = ref<Project[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 
+// Titre dynamique basé sur le projet
+watch(project, (newProject) => {
+  if (newProject) {
+    useHead({
+      title: newProject.title
+    });
+  } else {
+    useHead({
+      title: 'Projet'
+    });
+  }
+}, { immediate: true });
+
 // Données enrichies pour le projet (pourraient venir de Supabase plus tard)
 const projectDetails = computed(() => {
   if (!project.value) return null;

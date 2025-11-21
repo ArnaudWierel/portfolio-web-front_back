@@ -7,6 +7,10 @@ definePageMeta({
   layout: false
 });
 
+useHead({
+  title: 'À propos'
+});
+
 const { isDark, toggleTheme } = useTheme();
 
 const skills = [

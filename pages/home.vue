@@ -4,6 +4,10 @@ import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import type { Project } from '~/assets/data/projects';
 
+useHead({
+  title: 'Accueil'
+});
+
 const projects = ref<Project[]>([]);
 
 // Charger les projets depuis Supabase

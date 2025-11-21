@@ -7,6 +7,10 @@ definePageMeta({
   layout: false
 });
 
+useHead({
+  title: 'Contact'
+});
+
 const { isDark, toggleTheme } = useTheme();
 
 const form = ref({

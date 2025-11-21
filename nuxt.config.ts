@@ -8,6 +8,13 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      title: 'Arnaud Wierel - Créateur de sites web',
+      titleTemplate: '%s - Arnaud Wierel',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: 'Créateur de sites web professionnels pour entreprises, artisans, associations et petites entreprises. Design moderne, développement sur-mesure.' }
+      ],
       link: [
         {
           rel: 'preconnect',
