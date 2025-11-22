@@ -73,7 +73,7 @@ Ce message a été envoyé depuis le formulaire de contact de votre site web.
 
       // Envoyer l'email
       const { data, error } = await resend.emails.send({
-        from: 'Portfolio Contact <onboarding@resend.dev>', // Remplacez par votre domaine vérifié
+        from: 'Portfolio Contact <a.wierel@arnaudwiereldev.fr>', // Remplacez par votre domaine vérifié
         to: recipientEmail,
         replyTo: body.email,
         subject: `Nouveau message de contact - ${body.name}`,
