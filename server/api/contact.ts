@@ -22,39 +22,43 @@ export default defineEventHandler(async (event) => {
 
   // Récupérer la clé API Resend depuis les variables d'environnement
   const resendApiKey = config.resendApiKey || process.env.RESEND_API_KEY
-
-  if (!resendApiKey) {
-    console.error('RESEND_API_KEY n\'est pas configurée')
-    throw createError({
-      statusCode: 500,
-      message: 'Configuration email manquante'
-    })
-  }
-
-  // Récupérer l'email de destination depuis les variables d'environnement
   const recipientEmail = config.contactEmail || process.env.CONTACT_EMAIL
 
-  if (!recipientEmail) {
-    console.error('CONTACT_EMAIL n\'est pas configurée')
-    throw createError({
-      statusCode: 500,
-      message: 'Email de destination non configuré'
-    })
+  // Mode développement : si Resend n'est pas configuré, on sauvegarde juste dans Supabase
+  const isDevelopment = process.env.NODE_ENV === 'development'
+  
+  if (!resendApiKey || !recipientEmail) {
+    if (isDevelopment) {
+      console.warn('⚠️  RESEND_API_KEY ou CONTACT_EMAIL non configurées. Mode développement activé.')
+      console.warn('📧 Pour activer l\'envoi d\'emails, créez un fichier .env avec:')
+      console.warn('   RESEND_API_KEY=votre_cle_api')
+      console.warn('   CONTACT_EMAIL=votre-email@exemple.com')
+    } else {
+      console.error('RESEND_API_KEY ou CONTACT_EMAIL non configurées')
+      throw createError({
+        statusCode: 500,
+        message: 'Configuration email manquante. Veuillez configurer RESEND_API_KEY et CONTACT_EMAIL dans votre fichier .env'
+      })
+    }
   }
 
   try {
-    const resend = new Resend(resendApiKey)
-
-    // Préparer le contenu de l'email
-    const projectTypeText = body.projectType 
-      ? `\nType de projet : ${body.projectType}`
-      : ''
+    let emailData: any = null
     
-    const companyText = body.company 
-      ? `\nEntreprise : ${body.company}`
-      : ''
+    // Envoyer l'email seulement si Resend est configuré
+    if (resendApiKey && recipientEmail) {
+      const resend = new Resend(resendApiKey)
 
-    const emailContent = `
+      // Préparer le contenu de l'email
+      const projectTypeText = body.projectType 
+        ? `\nType de projet : ${body.projectType}`
+        : ''
+      
+      const companyText = body.company 
+        ? `\nEntreprise : ${body.company}`
+        : ''
+
+      const emailContent = `
 Nouveau message depuis le formulaire de contact
 
 Nom : ${body.name}
@@ -65,45 +69,51 @@ ${body.message}
 
 ---
 Ce message a été envoyé depuis le formulaire de contact de votre site web.
-    `.trim()
+      `.trim()
 
-    // Envoyer l'email
-    const { data, error } = await resend.emails.send({
-      from: 'Portfolio Contact <onboarding@resend.dev>', // Remplacez par votre domaine vérifié
-      to: recipientEmail,
-      replyTo: body.email,
-      subject: `Nouveau message de contact - ${body.name}`,
-      text: emailContent,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333;">Nouveau message depuis le formulaire de contact</h2>
-          
-          <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p><strong>Nom :</strong> ${body.name}</p>
-            <p><strong>Email :</strong> <a href="mailto:${body.email}">${body.email}</a></p>
-            ${body.company ? `<p><strong>Entreprise :</strong> ${body.company}</p>` : ''}
-            ${body.projectType ? `<p><strong>Type de projet :</strong> ${body.projectType}</p>` : ''}
+      // Envoyer l'email
+      const { data, error } = await resend.emails.send({
+        from: 'Portfolio Contact <onboarding@resend.dev>', // Remplacez par votre domaine vérifié
+        to: recipientEmail,
+        replyTo: body.email,
+        subject: `Nouveau message de contact - ${body.name}`,
+        text: emailContent,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #333;">Nouveau message depuis le formulaire de contact</h2>
+            
+            <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <p><strong>Nom :</strong> ${body.name}</p>
+              <p><strong>Email :</strong> <a href="mailto:${body.email}">${body.email}</a></p>
+              ${body.company ? `<p><strong>Entreprise :</strong> ${body.company}</p>` : ''}
+              ${body.projectType ? `<p><strong>Type de projet :</strong> ${body.projectType}</p>` : ''}
+            </div>
+            
+            <div style="margin: 20px 0;">
+              <h3 style="color: #333;">Message :</h3>
+              <p style="white-space: pre-wrap; line-height: 1.6;">${body.message}</p>
+            </div>
+            
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+            <p style="color: #666; font-size: 12px;">
+              Ce message a été envoyé depuis le formulaire de contact de votre site web.
+            </p>
           </div>
-          
-          <div style="margin: 20px 0;">
-            <h3 style="color: #333;">Message :</h3>
-            <p style="white-space: pre-wrap; line-height: 1.6;">${body.message}</p>
-          </div>
-          
-          <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
-          <p style="color: #666; font-size: 12px;">
-            Ce message a été envoyé depuis le formulaire de contact de votre site web.
-          </p>
-        </div>
-      `
-    })
-
-    if (error) {
-      console.error('Erreur Resend:', error)
-      throw createError({
-        statusCode: 500,
-        message: 'Erreur lors de l\'envoi de l\'email'
+        `
       })
+
+      if (error) {
+        console.error('Erreur Resend:', error)
+        throw createError({
+          statusCode: 500,
+          message: `Erreur lors de l'envoi de l'email: ${error.message || 'Erreur inconnue'}`
+        })
+      }
+
+      emailData = data
+      console.log('✅ Email envoyé avec succès via Resend')
+    } else {
+      console.log('⚠️  Mode développement : email non envoyé (Resend non configuré)')
     }
 
     // Optionnel : Sauvegarder aussi dans Supabase si configuré
@@ -135,8 +145,11 @@ Ce message a été envoyé depuis le formulaire de contact de votre site web.
 
     return {
       success: true,
-      message: 'Message envoyé avec succès',
-      emailId: data?.id
+      message: resendApiKey && recipientEmail 
+        ? 'Message envoyé avec succès' 
+        : 'Message enregistré (mode développement - email non envoyé)',
+      emailId: emailData?.id || null,
+      emailSent: !!resendApiKey && !!recipientEmail
     }
   } catch (error: any) {
     console.error('Erreur lors de l\'envoi:', error)
