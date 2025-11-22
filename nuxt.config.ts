@@ -70,6 +70,10 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    // Variables privées (côté serveur uniquement)
+    resendApiKey: process.env.RESEND_API_KEY || '',
+    contactEmail: process.env.CONTACT_EMAIL || '',
+    // Variables publiques
     public: {
       supabaseUrl: process.env.SUPABASE_URL || '',
       supabaseKey: process.env.SUPABASE_ANON_KEY || ''

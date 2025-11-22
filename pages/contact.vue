@@ -75,45 +75,17 @@ const handleSubmit = async (e: Event) => {
   error.value = null;
 
   try {
-    const { $supabase } = useNuxtApp();
-    
-    // Option 1: Stocker dans Supabase (nécessite une table 'contacts')
-    if ($supabase) {
-      try {
-        const { data, error: supabaseError } = await $supabase
-          .from('contacts')
-          .insert([
-            {
-              name: form.value.name,
-              email: form.value.email,
-              company: form.value.company || null,
-              message: form.value.message,
-              project_type: form.value.projectType || null,
-              created_at: new Date().toISOString()
-            }
-          ])
-          .select();
-
-        if (supabaseError) {
-          // Si la table n'existe pas, on simule juste l'envoi
-          console.warn('Table contacts non trouvée dans Supabase. Simulation de l\'envoi.');
-          await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-      } catch (err) {
-        // En cas d'erreur (table inexistante), on simule l'envoi
-        console.warn('Erreur Supabase, simulation de l\'envoi:', err);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+    // Envoyer via l'API qui gère l'email et la sauvegarde
+    await $fetch('/api/contact', {
+      method: 'POST',
+      body: {
+        name: form.value.name,
+        email: form.value.email,
+        company: form.value.company || null,
+        message: form.value.message,
+        projectType: form.value.projectType || null
       }
-    } else {
-      // Option 2: Envoyer via API (si vous avez un endpoint)
-      // const response = await $fetch('/api/contact', {
-      //   method: 'POST',
-      //   body: form.value
-      // });
-      
-      // Pour l'instant, on simule juste l'envoi
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
+    });
 
     submitted.value = true;
     form.value = {
@@ -130,7 +102,7 @@ const handleSubmit = async (e: Event) => {
     }, 5000);
   } catch (err: any) {
     console.error('Erreur lors de l\'envoi du formulaire:', err);
-    error.value = err.message || 'Une erreur est survenue. Veuillez réessayer.';
+    error.value = err.data?.message || err.message || 'Une erreur est survenue. Veuillez réessayer.';
   } finally {
     submitting.value = false;
   }

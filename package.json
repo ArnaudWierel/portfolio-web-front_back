@@ -18,6 +18,7 @@
     "gsap": "^3.10.4",
     "imagesloaded": "^5.0.0",
     "nuxt": "^3.10.2",
+    "resend": "^4.0.0",
     "split-type": "^0.3.2",
     "splitting": "^1.0.6",
     "vue": "^3.4.19",
